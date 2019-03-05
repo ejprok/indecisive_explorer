@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "mv_gen.h": "c",
+        "brd.h": "c"
+    }
+}
