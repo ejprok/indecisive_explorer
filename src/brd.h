@@ -67,5 +67,7 @@ extern const int H6;
 typedef uint64_t Bitboard;
 
 Bitboard getBoard();
+void printBoard();
+
 
 #endif
