@@ -71,10 +71,10 @@ Bitboard CompBishops  = 0b000000000000000011000000000000000000000000000000000000
 Bitboard CompHorses   = 0b0000000000000000000000110000000000000000000000000000000000000000;
 Bitboard CompPawns    = 0b0000000000000000000000000111111000000000000000000000000000000000;
 
-Bitboard HumanKings   = 0b0000000000000000000000000000000000000000000000000000000000000000;
-Bitboard HumanBishops = 0b0000000000000000000000000000000000000000000000000000000000000000;
-Bitboard HumanHorses  = 0b0000000000000000000000000000000000000000000000000000000000000000;
-Bitboard HumanPawns   = 0b0000000000000000000000000000000000000000000000000000000000000000;
+Bitboard HumanKings   = 0b0000000000000000000000000000000000000000000000000000000000011000;
+Bitboard HumanBishops = 0b0000000000000000000000000000000000000000000000000000000011000000;
+Bitboard HumanHorses  = 0b0000000000000000000000000000000000000000000000000000000000000011;
+Bitboard HumanPawns   = 0b0000000000000000000000000000000000000000000000000111111000000000;
 
 char boardLayout[64] = {'-'};
 
@@ -106,6 +106,14 @@ void printBoard() {
             boardLayout[i] = 'H';
         } else if (cPawns & 0b01) {
             boardLayout[i] = 'P';
+        } else if (hKings & 0b01) {
+            boardLayout[i] = 'k';
+        } else if (hBishops & 0b01) {
+            boardLayout[i] = 'b';
+        } else if (hHorses & 0b01) {
+            boardLayout[i] = 'h';
+        } else if (hPawns & 0b01) {
+            boardLayout[i] = 'p';
         }
         else {
             boardLayout[i] = '-';
@@ -114,6 +122,10 @@ void printBoard() {
         cBishops = cBishops >> 1;
         cHorses = cHorses >> 1;
         cPawns = cPawns >> 1;
+        hKings = hKings >> 1;
+        hBishops = hBishops >> 1;
+        hHorses = hHorses >> 1;
+        hPawns = hPawns >> 1;
         i++;
 
     }
