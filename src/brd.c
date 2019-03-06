@@ -118,14 +118,14 @@ void printBoard() {
         else {
             boardLayout[i] = '-';
         }
-        cKings = cKings >> 1;
-        cBishops = cBishops >> 1;
-        cHorses = cHorses >> 1;
-        cPawns = cPawns >> 1;
-        hKings = hKings >> 1;
-        hBishops = hBishops >> 1;
-        hHorses = hHorses >> 1;
-        hPawns = hPawns >> 1;
+        cKings    = cKings >> 1;
+        cBishops  = cBishops >> 1;
+        cHorses   = cHorses >> 1;
+        cPawns    = cPawns >> 1;
+        hKings    = hKings >> 1;
+        hBishops  = hBishops >> 1;
+        hHorses   = hHorses >> 1;
+        hPawns    = hPawns >> 1;
         i++;
 
     }
@@ -135,14 +135,6 @@ void printBoard() {
     printf("%c %c %c %c %c %c %c %c\n",boardLayout[16],boardLayout[17],boardLayout[18],boardLayout[19], boardLayout[20], boardLayout[21], boardLayout[22], boardLayout[23]);
     printf("%c %c %c %c %c %c %c %c\n",boardLayout[8],boardLayout[9],boardLayout[10],boardLayout[11], boardLayout[12], boardLayout[13], boardLayout[14], boardLayout[15]);
     printf("%c %c %c %c %c %c %c %c\n",boardLayout[0],boardLayout[1],boardLayout[2],boardLayout[3], boardLayout[4], boardLayout[5], boardLayout[6], boardLayout[7]);
-    //print 2nd rank
 
-    //print 3rd rank
-
-    //print 4th rank
-
-    //print 5th rank
-
-    //print 6th rank
 }
 
