@@ -1,0 +1,15 @@
+Game Loop
+Move Generator
+Game Loop that plays
+Minimax w/simple eval (material only)
+alpha-beta pruning
+iterative deepening
+improve the eval function
+sorting moves - like capture moves
+		- killer moves
+		- history tables
+
+
+for maxdepth = 2 to infinity
+	minimax (maxdepth)
+	save best move

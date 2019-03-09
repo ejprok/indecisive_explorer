@@ -3,6 +3,14 @@
 #include <stdio.h>
 #include <stdint.h>
 
+#define ANSI_COLOR_RED     "\x1b[31m"
+#define ANSI_COLOR_GREEN   "\x1b[32m"
+#define ANSI_COLOR_YELLOW  "\x1b[33m"
+#define ANSI_COLOR_BLUE    "\x1b[34m"
+#define ANSI_COLOR_MAGENTA "\x1b[35m"
+#define ANSI_COLOR_CYAN    "\x1b[36m"
+#define ANSI_COLOR_RESET   "\x1b[0m"
+
 //rank 1
 const int A1 = 0;
 const int B1 = 1;
@@ -76,17 +84,9 @@ Bitboard HumanBishops = 0b000000000000000000000000000000000000000000000000000000
 Bitboard HumanHorses  = 0b0000000000000000000000000000000000000000000000000000000000000011;
 Bitboard HumanPawns   = 0b0000000000000000000000000000000000000000000000000111111000000000;
 
-char boardLayout[64] = {'-'};
-
-Bitboard getBoard() {
-    Bitboard test = 4;
-    return test;
-}
-
-
-void printBoard() {
+void print_board() {
     //print 1st rank
-    int i = 0;
+    int i = 1;
     Bitboard cKings = CompKings;
     Bitboard cBishops = CompBishops;
     Bitboard cHorses = CompHorses;
@@ -97,26 +97,34 @@ void printBoard() {
     Bitboard hHorses = HumanHorses;
     Bitboard hPawns = HumanPawns;
 
-    while (i < 64) {
+    printf("\t   ------------------------" ANSI_COLOR_RED " Computer\n\t"  ANSI_COLOR_RESET);
+    printf(" 6 ");
+    while (i <= 48) {
+
         if (cKings & 0b01) {
-            boardLayout[i] = 'K';
+            printf(ANSI_COLOR_BLUE " K " ANSI_COLOR_RESET);
         } else if (cBishops & 0b01) {
-            boardLayout[i] = 'B';
+            printf(ANSI_COLOR_BLUE " B " ANSI_COLOR_RESET);
         } else if (cHorses & 0b01) {
-            boardLayout[i] = 'H';
+            printf(ANSI_COLOR_BLUE " H " ANSI_COLOR_RESET);
         } else if (cPawns & 0b01) {
-            boardLayout[i] = 'P';
+            printf(ANSI_COLOR_BLUE " P " ANSI_COLOR_RESET);
         } else if (hKings & 0b01) {
-            boardLayout[i] = 'k';
+            printf(ANSI_COLOR_RED " k " ANSI_COLOR_RESET);
         } else if (hBishops & 0b01) {
-            boardLayout[i] = 'b';
+            printf(ANSI_COLOR_RED " b " ANSI_COLOR_RESET);
         } else if (hHorses & 0b01) {
-            boardLayout[i] = 'h';
+            printf(ANSI_COLOR_RED " h " ANSI_COLOR_RESET);
         } else if (hPawns & 0b01) {
-            boardLayout[i] = 'p';
+            printf(ANSI_COLOR_RED " p " ANSI_COLOR_RESET);
         }
         else {
-            boardLayout[i] = '-';
+            printf(ANSI_COLOR_GREEN " - " ANSI_COLOR_RESET);
+        }
+        if ((i % 8 == 0) && (i != 48)) {
+            printf("\n\t");
+            int rank = (48 - i) / 8 ;
+            printf(" %d ", rank);
         }
         cKings    = cKings >> 1;
         cBishops  = cBishops >> 1;
@@ -129,12 +137,8 @@ void printBoard() {
         i++;
 
     }
-    printf("%c %c %c %c %c %c %c %c\n",boardLayout[40],boardLayout[41],boardLayout[42],boardLayout[43], boardLayout[44], boardLayout[45], boardLayout[46], boardLayout[47]);
-    printf("%c %c %c %c %c %c %c %c\n",boardLayout[32],boardLayout[33],boardLayout[34],boardLayout[35], boardLayout[36], boardLayout[37], boardLayout[38], boardLayout[39]);
-    printf("%c %c %c %c %c %c %c %c\n",boardLayout[24],boardLayout[25],boardLayout[26],boardLayout[27], boardLayout[28], boardLayout[29], boardLayout[30], boardLayout[31]);
-    printf("%c %c %c %c %c %c %c %c\n",boardLayout[16],boardLayout[17],boardLayout[18],boardLayout[19], boardLayout[20], boardLayout[21], boardLayout[22], boardLayout[23]);
-    printf("%c %c %c %c %c %c %c %c\n",boardLayout[8],boardLayout[9],boardLayout[10],boardLayout[11], boardLayout[12], boardLayout[13], boardLayout[14], boardLayout[15]);
-    printf("%c %c %c %c %c %c %c %c\n",boardLayout[0],boardLayout[1],boardLayout[2],boardLayout[3], boardLayout[4], boardLayout[5], boardLayout[6], boardLayout[7]);
+    printf("\n\t   ------------------------" ANSI_COLOR_BLUE " Human\n" ANSI_COLOR_RESET);
+    printf("\t    A  B  C  D  E  F  G  H \n");
 
 }
 
