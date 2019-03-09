@@ -14,6 +14,7 @@ void computer_move();
 int main(int argc, char **argv) {
     //get the first player
     ask_which_player();
+    init_board();
     //run the game loop
     print_board();
     // game_loop();

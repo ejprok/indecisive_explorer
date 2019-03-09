@@ -74,48 +74,45 @@ const int H6 = 47;
 
 typedef uint64_t Bitboard;
 
-Bitboard CompKings    = 0b0000000000000000000110000000000000000000000000000000000000000000;
-Bitboard CompBishops  = 0b0000000000000000110000000000000000000000000000000000000000000000;
-Bitboard CompHorses   = 0b0000000000000000000000110000000000000000000000000000000000000000;
-Bitboard CompPawns    = 0b0000000000000000000000000111111000000000000000000000000000000000;
 
-Bitboard HumanKings   = 0b0000000000000000000000000000000000000000000000000000000000011000;
-Bitboard HumanBishops = 0b0000000000000000000000000000000000000000000000000000000011000000;
-Bitboard HumanHorses  = 0b0000000000000000000000000000000000000000000000000000000000000011;
-Bitboard HumanPawns   = 0b0000000000000000000000000000000000000000000000000111111000000000;
+struct GameBoard game_board;
+
+void init_board() {
+    game_board.comp_kings   = 0b0000000000000000000110000000000000000000000000000000000000000000;
+    game_board.comp_bishops  = 0b0000000000000000110000000000000000000000000000000000000000000000;
+    game_board.comp_horses   = 0b0000000000000000000000110000000000000000000000000000000000000000;
+    game_board.comp_pawns    = 0b0000000000000000000000000111111000000000000000000000000000000000;
+
+    game_board.human_kings   = 0b0000000000000000000000000000000000000000000000000000000000011000;
+    game_board.human_bishops = 0b0000000000000000000000000000000000000000000000000000000011000000;
+    game_board.human_horses  = 0b0000000000000000000000000000000000000000000000000000000000000011;
+    game_board.human_pawns   = 0b0000000000000000000000000000000000000000000000000111111000000000;
+}
 
 void print_board() {
     //print 1st rank
     int i = 1;
-    Bitboard cKings = CompKings;
-    Bitboard cBishops = CompBishops;
-    Bitboard cHorses = CompHorses;
-    Bitboard cPawns = CompPawns;
-
-    Bitboard hKings = HumanKings;
-    Bitboard hBishops = HumanBishops;
-    Bitboard hHorses = HumanHorses;
-    Bitboard hPawns = HumanPawns;
+    struct GameBoard board_copy = game_board;
 
     printf("\t   ------------------------" ANSI_COLOR_RED " Computer\n\t"  ANSI_COLOR_RESET);
     printf(" 6 ");
     while (i <= 48) {
 
-        if (cKings & 0b01) {
+        if (board_copy.comp_kings & 0b01) {
             printf(ANSI_COLOR_BLUE " K " ANSI_COLOR_RESET);
-        } else if (cBishops & 0b01) {
+        } else if (board_copy.comp_bishops & 0b01) {
             printf(ANSI_COLOR_BLUE " B " ANSI_COLOR_RESET);
-        } else if (cHorses & 0b01) {
+        } else if (board_copy.comp_horses & 0b01) {
             printf(ANSI_COLOR_BLUE " H " ANSI_COLOR_RESET);
-        } else if (cPawns & 0b01) {
+        } else if (board_copy.comp_pawns & 0b01) {
             printf(ANSI_COLOR_BLUE " P " ANSI_COLOR_RESET);
-        } else if (hKings & 0b01) {
+        } else if (board_copy.human_kings & 0b01) {
             printf(ANSI_COLOR_RED " k " ANSI_COLOR_RESET);
-        } else if (hBishops & 0b01) {
+        } else if (board_copy.human_bishops & 0b01) {
             printf(ANSI_COLOR_RED " b " ANSI_COLOR_RESET);
-        } else if (hHorses & 0b01) {
+        } else if (board_copy.human_horses & 0b01) {
             printf(ANSI_COLOR_RED " h " ANSI_COLOR_RESET);
-        } else if (hPawns & 0b01) {
+        } else if (board_copy.human_pawns & 0b01) {
             printf(ANSI_COLOR_RED " p " ANSI_COLOR_RESET);
         }
         else {
@@ -126,14 +123,14 @@ void print_board() {
             int rank = (48 - i) / 8 ;
             printf(" %d ", rank);
         }
-        cKings    = cKings >> 1;
-        cBishops  = cBishops >> 1;
-        cHorses   = cHorses >> 1;
-        cPawns    = cPawns >> 1;
-        hKings    = hKings >> 1;
-        hBishops  = hBishops >> 1;
-        hHorses   = hHorses >> 1;
-        hPawns    = hPawns >> 1;
+        board_copy.comp_kings    = board_copy.comp_kings >> 1;
+        board_copy.comp_bishops  = board_copy.comp_bishops >> 1;
+        board_copy.comp_horses   = board_copy.comp_horses >> 1;
+        board_copy.comp_pawns    = board_copy.comp_pawns >> 1;
+        board_copy.human_kings    = board_copy.human_kings >> 1;
+        board_copy.human_bishops  = board_copy.human_bishops >> 1;
+        board_copy.human_horses   = board_copy.human_horses >> 1;
+        board_copy.human_pawns    = board_copy.human_pawns >> 1;
         i++;
 
     }

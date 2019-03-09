@@ -1,7 +1,7 @@
 #ifndef _MV_GEN_
 #define _MV_GEN_
 
-int getNum(void);
-
+void gen_human_moves();
+void gen_computer_moves();
 
 #endif
