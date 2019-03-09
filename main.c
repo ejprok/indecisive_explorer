@@ -12,9 +12,11 @@ void human_move();
 void computer_move();
 
 int main(int argc, char **argv) {
+    //initial setup 
+    init_board();
+
     //get the first player
     ask_which_player();
-    init_board();
     //run the game loop
     print_board();
     // game_loop();
