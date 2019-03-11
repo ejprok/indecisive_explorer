@@ -67,20 +67,28 @@ extern const int H6;
 typedef uint64_t Bitboard;
 struct GameBoard
 {
+    //computer pieces
     Bitboard comp_kings;
     Bitboard comp_bishops;
     Bitboard comp_horses;
     Bitboard comp_pawns;
-
+    //human pieces
     Bitboard human_kings;
     Bitboard human_bishops;
     Bitboard human_horses;
     Bitboard human_pawns;
+
+    //combined pieces
+    Bitboard all_pieces;
+    Bitboard comp_pieces;
+    Bitboard human_pieces;
 };
 
 
 
 void print_board();
 void init_board();
+void update_extra_boards();
+struct GameBoard get_board();
 
 #endif

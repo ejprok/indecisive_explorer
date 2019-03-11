@@ -78,7 +78,7 @@ typedef uint64_t Bitboard;
 struct GameBoard game_board;
 
 void init_board() {
-    game_board.comp_kings   = 0b0000000000000000000110000000000000000000000000000000000000000000;
+    game_board.comp_kings    = 0b0000000000000000000110000000000000000000000000000000000000000000;
     game_board.comp_bishops  = 0b0000000000000000110000000000000000000000000000000000000000000000;
     game_board.comp_horses   = 0b0000000000000000000000110000000000000000000000000000000000000000;
     game_board.comp_pawns    = 0b0000000000000000000000000111111000000000000000000000000000000000;
@@ -87,6 +87,18 @@ void init_board() {
     game_board.human_bishops = 0b0000000000000000000000000000000000000000000000000000000011000000;
     game_board.human_horses  = 0b0000000000000000000000000000000000000000000000000000000000000011;
     game_board.human_pawns   = 0b0000000000000000000000000000000000000000000000000111111000000000;
+    
+    update_extra_boards();
+}
+
+struct GameBoard get_board() {
+    return game_board;
+}
+
+void update_extra_boards() {
+    game_board.comp_pieces = game_board.comp_kings | game_board.comp_bishops | game_board.comp_horses | game_board.comp_pawns;
+    game_board.human_pieces = game_board.human_kings | game_board.human_bishops | game_board.human_horses | game_board.human_pawns;
+    game_board.all_pieces = game_board.comp_pieces | game_board.human_pieces;
 }
 
 void print_board() {

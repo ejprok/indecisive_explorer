@@ -15,6 +15,7 @@ int main(int argc, char **argv) {
     //initial setup 
     init_board();
 
+    gen_human_moves(get_board());
     //get the first player
     ask_which_player();
     //run the game loop
