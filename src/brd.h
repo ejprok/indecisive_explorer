@@ -90,5 +90,6 @@ void print_board();
 void init_board();
 void update_extra_boards();
 struct GameBoard get_board();
+void debug_board(Bitboard brd);
 
 #endif

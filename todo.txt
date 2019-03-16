@@ -13,3 +13,11 @@ sorting moves - like capture moves
 for maxdepth = 2 to infinity
 	minimax (maxdepth)
 	save best move
+
+Transposition Tables
+	save a bunch of bitboards
+	zobrist key hashing
+
+Horizon Effect 
+	Quiescent Extensions
+	

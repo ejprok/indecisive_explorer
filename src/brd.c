@@ -78,15 +78,15 @@ typedef uint64_t Bitboard;
 struct GameBoard game_board;
 
 void init_board() {
-    game_board.comp_kings    = 0b0000000000000000000110000000000000000000000000000000000000000000;
-    game_board.comp_bishops  = 0b0000000000000000110000000000000000000000000000000000000000000000;
-    game_board.comp_horses   = 0b0000000000000000000000110000000000000000000000000000000000000000;
-    game_board.comp_pawns    = 0b0000000000000000000000000111111000000000000000000000000000000000;
+    game_board.human_kings    = 0b0000000000000000000110000000000000000000000000000000000000000000;
+    game_board.human_bishops  = 0b0000000000000000110000000000000000000000000000000000000000000000;
+    game_board.human_horses   = 0b0000000000000000000000110000000000000000000000000000000000000000;
+    game_board.human_pawns    = 0b0000000000000000000000000111111000000000000000000000000000000000;
 
-    game_board.human_kings   = 0b0000000000000000000000000000000000000000000000000000000000011000;
-    game_board.human_bishops = 0b0000000000000000000000000000000000000000000000000000000011000000;
-    game_board.human_horses  = 0b0000000000000000000000000000000000000000000000000000000000000011;
-    game_board.human_pawns   = 0b0000000000000000000000000000000000000000000000000111111000000000;
+    game_board.comp_kings   = 0b0000000000000000000000000000000000000000000000000000000000011000;
+    game_board.comp_bishops = 0b0000000000000000000000000000000000000000000000000000000011000000;
+    game_board.comp_horses  = 0b0000000000000000000000000000000000000000000000000000000000000011;
+    game_board.comp_pawns   = 0b0000000000000000000000000000000000000000000000000111111000000000;
     
     update_extra_boards();
 }
@@ -111,21 +111,21 @@ void print_board() {
     while (i <= 48) {
 
         if (board_copy.comp_kings & 0b01) {
-            printf(ANSI_COLOR_BLUE " K " ANSI_COLOR_RESET);
+            printf(ANSI_COLOR_RED " K " ANSI_COLOR_RESET);
         } else if (board_copy.comp_bishops & 0b01) {
-            printf(ANSI_COLOR_BLUE " B " ANSI_COLOR_RESET);
+            printf(ANSI_COLOR_RED " B " ANSI_COLOR_RESET);
         } else if (board_copy.comp_horses & 0b01) {
-            printf(ANSI_COLOR_BLUE " H " ANSI_COLOR_RESET);
+            printf(ANSI_COLOR_RED " H " ANSI_COLOR_RESET);
         } else if (board_copy.comp_pawns & 0b01) {
-            printf(ANSI_COLOR_BLUE " P " ANSI_COLOR_RESET);
+            printf(ANSI_COLOR_RED " P " ANSI_COLOR_RESET);
         } else if (board_copy.human_kings & 0b01) {
-            printf(ANSI_COLOR_RED " k " ANSI_COLOR_RESET);
+            printf(ANSI_COLOR_BLUE " k " ANSI_COLOR_RESET);
         } else if (board_copy.human_bishops & 0b01) {
-            printf(ANSI_COLOR_RED " b " ANSI_COLOR_RESET);
+            printf(ANSI_COLOR_BLUE " b " ANSI_COLOR_RESET);
         } else if (board_copy.human_horses & 0b01) {
-            printf(ANSI_COLOR_RED " h " ANSI_COLOR_RESET);
+            printf(ANSI_COLOR_BLUE " h " ANSI_COLOR_RESET);
         } else if (board_copy.human_pawns & 0b01) {
-            printf(ANSI_COLOR_RED " p " ANSI_COLOR_RESET);
+            printf(ANSI_COLOR_BLUE " p " ANSI_COLOR_RESET);
         }
         else {
             printf(ANSI_COLOR_GREEN " - " ANSI_COLOR_RESET);
@@ -149,5 +149,20 @@ void print_board() {
     printf("\n\t   ------------------------" ANSI_COLOR_BLUE " Human\n" ANSI_COLOR_RESET);
     printf("\t    A  B  C  D  E  F  G  H \n");
 
+}
+
+void debug_board(Bitboard brd) {
+    printf("\n");
+    int i = 1;
+    while (i <= 48) {
+        int output = brd & 0b01;
+        printf(" %d ", output);
+        if (i % 8 == 0) {
+            printf("\n");
+        }
+        brd = brd >> 1;
+        i++;
+    } 
+    printf("\n");
 }
 
