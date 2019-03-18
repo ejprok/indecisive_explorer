@@ -39,10 +39,30 @@ void game_loop() {
 }
 
 void human_move() {
+    //get valid human moves
+
+    //display valid moves
+
+    //prompt for move
+
+    //using input, make a move
+
+    //if wrong, re-prompt
 
 }
 
 void computer_move() {
+
+}
+
+//take a string as input and convert to an index
+int convert_str_to_index(char *input) {
+
+    return 1;
+}
+
+//take an int as input and convert to a str output
+char* convert_index_to_str(int input) {
 
 }
 
