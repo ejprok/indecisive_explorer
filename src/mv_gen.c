@@ -4,7 +4,7 @@
 
 
 
-void gen_human_moves(struct GameBoard gm_brd ) {
+struct MoveInfo* gen_human_moves(struct GameBoard gm_brd ) {
     //inialize the array of moves
     struct MoveInfo *move_list = malloc(1000 * sizeof *move_list);
     int move_list_size = 0;
@@ -17,14 +17,12 @@ void gen_human_moves(struct GameBoard gm_brd ) {
     //BISHOPS
     move_list_size = get_moves_for_type(gm_brd, move_list, move_list_size, 2);
 
-
-    //check the bishops
-
     //check the horses
 
     //check the pawns
 
     print_moves(move_list, move_list_size);
+
 
 }
 

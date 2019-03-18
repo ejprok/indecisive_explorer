@@ -11,7 +11,7 @@ struct MoveInfo
     
 };
 
-void gen_human_moves();
+struct MoveInfo* gen_human_moves();
 void gen_computer_moves();
 
 int* loop_thru_brd(Bitboard bit_brd, int start_bit, int end_bit);
