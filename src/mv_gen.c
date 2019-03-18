@@ -15,14 +15,16 @@ struct MoveInfo* gen_human_moves(struct GameBoard gm_brd ) {
 
      //////////////////////////////////////////////////////////////
     //BISHOPS
-    move_list_size = get_moves_for_type(gm_brd, move_list, move_list_size, 2);
+    // move_list_size = get_moves_for_type(gm_brd, move_list, move_list_size, 2);
 
     //check the horses
 
     //check the pawns
+    move_list_size = get_moves_for_type(gm_brd, move_list, move_list_size, 4);
 
     print_moves(move_list, move_list_size);
 
+    return move_list;
 
 }
 
@@ -197,17 +199,14 @@ void gen_computer_moves() {
 }
 
 
-
 Bitboard get_king_moves(int location, Bitboard invalid_locations, struct GameBoard gm_brd) {
     Bitboard loc = 0b01;
     loc = loc << location;
     Bitboard move;
-
     //check if the king is at edge of board
     if (location == 47 || location == 39 || location == 7 || location == 0) {
         return 0;
     }
-
     //if leftwing king
     if ((location <= 3 ) || (location <= 43 && location > 4)) {
         move = loc >> 1;
@@ -215,21 +214,95 @@ Bitboard get_king_moves(int location, Bitboard invalid_locations, struct GameBoa
     //if rightwing king 
     if ((location >= 4 && location < 43) || (location >= 44)){
         move = loc << 1;
-    }
-    
+    }   
     move = move & ~invalid_locations;
     return move;
 
 }
 
 Bitboard get_bishop_moves(int location, Bitboard invalid_locations, struct GameBoard gm_brd) {
+    Bitboard loc = 0b01;
+    loc = loc << location;
+    Bitboard move_tl_lr = 0;
+    Bitboard move_ll_tp = 0;
+    Bitboard move = 0;
+    Bitboard up_left_low_right_mask = 0b1000000001000000001000000001000000001000000001000000001000000001;
+    Bitboard low_left_up_right_mask = 0b0000000100000010000001000000100000010000001000000100000010000000;
+    // move = move |  (up_left_low_right_mask << location);
+    // move = move |  (up_left_low_right_mask >> (63 -location));
+
+    // move_ll_tp = move_ll_tp |  (low_left_up_right_mask << location);
+    move_ll_tp = move_ll_tp |  (low_left_up_right_mask >>(63 -location));
+
+    debug_board(move_ll_tp);
+    move_ll_tp &= notAFile;
+    debug_board(move_ll_tp);
+
+
+
+    //chop off last 8 bits and and with 10000001, this will tell if there is something on the edge
+    
+
+
+
+    move = move & valid_mask;
+    move = move & ~loc;
+
+    return move;
 
 }
 Bitboard get_horse_moves(int location, Bitboard invalid_locations, struct GameBoard gm_brd) {
+    Bitboard loc = 0b01;
+    loc = loc << location;
 
+    return loc;
 }
-Bitboard get_pawn_moves(int location, Bitboard invalid_locations, struct GameBoard gm_brd) {
 
+Bitboard get_pawn_moves(int location, Bitboard invalid_locations, struct GameBoard gm_brd) {
+    Bitboard loc = 0b01;
+    loc = loc << location;
+    Bitboard move = 0;
+    Bitboard move_l = 0;
+    Bitboard move_r = 0;
+
+    //if a human pawn
+    if(invalid_locations == gm_brd.human_pieces) {
+        //right
+        move_r |= loc >> 9;
+        move_r &= notAFile;
+        move_r &= gm_brd.comp_pieces;
+
+        //left 
+        move_l |= loc >> 7;
+        move_l &= notHFile;
+        move_l &= gm_brd.comp_pieces;
+
+        //forward move
+        move |= loc >> 8;
+        move &= ~gm_brd.comp_pieces;
+        move |= (move_r | move_l);
+
+
+    } else {
+        //right
+        move_r |= loc << 7;
+        move_r &= notAFile;
+        move_r &= gm_brd.human_pieces;
+
+        //left 
+        move_l |= loc << 9;
+        move_l &= notHFile;
+        move_l &= gm_brd.human_pieces;
+
+        //forward move
+        move |= loc << 8;
+        move &= ~gm_brd.human_pieces;
+        move |= (move_r | move_l);
+
+
+    }
+    move &= ~invalid_locations;
+    return move;
 }
 
 Bitboard* get_piece_locations(Bitboard bit_brd) {
@@ -325,4 +398,11 @@ void print_header(Bitboard data) {
         flag = flag >> 1;
     }
     printf("\n");
+}
+
+int get_row(int location) {
+    if( location <= 7) {
+        return 0;
+    }
+    return 0;
 }

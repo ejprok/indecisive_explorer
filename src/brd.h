@@ -65,6 +65,11 @@ extern const int G6;
 extern const int H6;
 
 typedef uint64_t Bitboard;
+
+extern const Bitboard valid_mask;
+extern const Bitboard notHFile;
+extern const Bitboard notAFile;
+
 struct GameBoard
 {
     //computer pieces

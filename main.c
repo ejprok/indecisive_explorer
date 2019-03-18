@@ -63,7 +63,8 @@ int convert_str_to_index(char *input) {
 
 //take an int as input and convert to a str output
 char* convert_index_to_str(int input) {
-
+    char* test;
+    return test;
 }
 
 void ask_which_player() {
