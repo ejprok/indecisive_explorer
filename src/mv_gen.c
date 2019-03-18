@@ -18,6 +18,7 @@ struct MoveInfo* gen_human_moves(struct GameBoard gm_brd ) {
     // move_list_size = get_moves_for_type(gm_brd, move_list, move_list_size, 2);
 
     //check the horses
+    move_list_size = get_moves_for_type(gm_brd, move_list, move_list_size, 3);
 
     //check the pawns
     move_list_size = get_moves_for_type(gm_brd, move_list, move_list_size, 4);
@@ -100,7 +101,7 @@ int get_moves_for_type(struct GameBoard gm_brd, struct MoveInfo *move_list, int 
         }
             
         
-        //loop through each possible move and prepare it and at to list
+        //loop through each possible move and prepare it and add to list
         while(moves) {
             int move_location = __builtin_ctzll(moves);
             moves = moves >> (move_location + 1);
@@ -109,7 +110,7 @@ int get_moves_for_type(struct GameBoard gm_brd, struct MoveInfo *move_list, int 
             single_move = single_move << move_location;
             int piece_cap = check_attack(single_move, gm_brd, piece_type);
             //prepare the move's header
-            move_list[move_list_size] = prepare_move(single_move, piece_locations[i], move_location, piece_cap);
+            move_list[move_list_size] = prepare_move(single_move, piece_locations[i], move_location, piece_cap, piece_type);
             //add the move to the list of moves
             add_move(single_move, move_list, move_list_size);
             move_list_size++;
@@ -123,11 +124,11 @@ int get_moves_for_type(struct GameBoard gm_brd, struct MoveInfo *move_list, int 
 
 void print_moves(struct MoveInfo *moves, int size) {
     int i;
-    printf("Move List: --------------------------------------------\n");
+    printf("\nMove List:   --------------------------------------------\n");
     for (i=0; i<size;i++) {
-        printf("At: %d - Start: %d, End: %d, Piece Cap: %d\n", i, moves[i].start, moves[i].end, moves[i].piece_cap);
+        printf("At: %d - Start: %d, End: %d, Piece Type: %d,  Piece Cap: %d\n", i, moves[i].start, moves[i].end, moves[i].piece_type, moves[i].piece_cap);
     }
-    printf("End Move List: --------------------------------------------\n");
+    printf("End Move List: --------------------------------------------\n\n");
 
 }
 
@@ -189,7 +190,7 @@ int check_attack(Bitboard location, struct GameBoard gm_brd, int piece_type) {
     }
 
 
-    //return 0 for nothing
+    //return 0 for clearhing
     return 0;
 
 }
@@ -235,7 +236,7 @@ Bitboard get_bishop_moves(int location, Bitboard invalid_locations, struct GameB
     move_ll_tp = move_ll_tp |  (low_left_up_right_mask >>(63 -location));
 
     debug_board(move_ll_tp);
-    move_ll_tp &= notAFile;
+    move_ll_tp &= clearAFile;
     debug_board(move_ll_tp);
 
 
@@ -252,10 +253,34 @@ Bitboard get_bishop_moves(int location, Bitboard invalid_locations, struct GameB
 
 }
 Bitboard get_horse_moves(int location, Bitboard invalid_locations, struct GameBoard gm_brd) {
+    Bitboard move, clip_1, clip_2, clip_3, clip_4, clip_5, clip_6, clip_7, clip_8;
     Bitboard loc = 0b01;
+    move = 0;
     loc = loc << location;
 
-    return loc;
+    clip_1 = clearAFile & clearBFile;
+    clip_2 = clearAFile;
+    clip_3 = clearHFile;
+    clip_4 = clearHFile & clearGFile;
+    clip_5 = clearHFile & clearGFile;
+    clip_6 = clearHFile;
+    clip_7 = clearAFile;
+    clip_8 = clearAFile & clearBFile;
+
+    move |= (loc & clip_4) >> 10;
+    move |= (loc & clip_3) >> 17;
+    move |= (loc & clip_2) >> 15;
+    move |= (loc & clip_1) >> 6;
+
+    move |= (loc & clip_5) << 6;
+    move |= (loc & clip_6) << 15;
+    move |= (loc & clip_7) << 17;
+    move |= (loc & clip_8) << 10;
+
+    move &= ~invalid_locations;
+
+    debug_board(move);
+    return move;
 }
 
 Bitboard get_pawn_moves(int location, Bitboard invalid_locations, struct GameBoard gm_brd) {
@@ -269,12 +294,12 @@ Bitboard get_pawn_moves(int location, Bitboard invalid_locations, struct GameBoa
     if(invalid_locations == gm_brd.human_pieces) {
         //right
         move_r |= loc >> 9;
-        move_r &= notAFile;
+        move_r &= clearAFile;
         move_r &= gm_brd.comp_pieces;
 
         //left 
         move_l |= loc >> 7;
-        move_l &= notHFile;
+        move_l &= clearHFile;
         move_l &= gm_brd.comp_pieces;
 
         //forward move
@@ -283,15 +308,16 @@ Bitboard get_pawn_moves(int location, Bitboard invalid_locations, struct GameBoa
         move |= (move_r | move_l);
 
 
+    //else computer pawn
     } else {
         //right
         move_r |= loc << 7;
-        move_r &= notAFile;
+        move_r &= clearAFile;
         move_r &= gm_brd.human_pieces;
 
         //left 
         move_l |= loc << 9;
-        move_l &= notHFile;
+        move_l &= clearHFile;
         move_l &= gm_brd.human_pieces;
 
         //forward move
@@ -339,12 +365,13 @@ Bitboard prepare_move_header(Bitboard move, Bitboard location, Bitboard piece) {
     return move;
 }
 
-struct MoveInfo prepare_move(Bitboard move, int start, int end, int piece_cap) {
+struct MoveInfo prepare_move(Bitboard move, int start, int end, int piece_cap, int piece_type) {
     struct MoveInfo move_info;
     move_info.move = move;
     move_info.start = start;
     move_info.end = end;
     move_info.piece_cap = piece_cap;
+    move_info.piece_type = piece_type;
     return move_info;
 }
 

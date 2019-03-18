@@ -67,8 +67,14 @@ extern const int H6;
 typedef uint64_t Bitboard;
 
 extern const Bitboard valid_mask;
-extern const Bitboard notHFile;
-extern const Bitboard notAFile;
+extern const Bitboard clearAFile;
+extern const Bitboard clearBFile;
+extern const Bitboard clearCFile;
+extern const Bitboard clearDFile;
+extern const Bitboard clearEFile;
+extern const Bitboard clearFFile;
+extern const Bitboard clearGFile;
+extern const Bitboard clearHFile;
 
 struct GameBoard
 {

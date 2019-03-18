@@ -7,6 +7,7 @@ struct MoveInfo
     Bitboard move;
     int start;
     int end;
+    int piece_type;
     int piece_cap;
     
 };
@@ -27,7 +28,7 @@ void print_bits(Bitboard data);
 int check_attack(Bitboard location, struct GameBoard gm_brd, int piece_type);
 
 Bitboard prepare_move_header(Bitboard move, Bitboard location, Bitboard piece);
-struct MoveInfo prepare_move(Bitboard move, int start, int end, int piece_cap);
+struct MoveInfo prepare_move(Bitboard move, int start, int end, int piece_cap, int piece_type);
 
 int get_moves_for_type(struct GameBoard gm_brd, struct MoveInfo *move_list, int move_list_size, int piece_type);
 
