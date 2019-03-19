@@ -15,7 +15,7 @@ struct MoveInfo* gen_human_moves(struct GameBoard gm_brd ) {
 
      //////////////////////////////////////////////////////////////
     //BISHOPS
-    // move_list_size = get_moves_for_type(gm_brd, move_list, move_list_size, 2);
+    move_list_size = get_moves_for_type(gm_brd, move_list, move_list_size, 2);
 
     //check the horses
     move_list_size = get_moves_for_type(gm_brd, move_list, move_list_size, 3);
@@ -224,20 +224,21 @@ Bitboard get_king_moves(int location, Bitboard invalid_locations, struct GameBoa
 Bitboard get_bishop_moves(int location, Bitboard invalid_locations, struct GameBoard gm_brd) {
     Bitboard loc = 0b01;
     loc = loc << location;
+    Bitboard mask, move;
     Bitboard move_tl_lr = 0;
     Bitboard move_ll_tp = 0;
-    Bitboard move = 0;
+    move = 0;
+    mask = 0;
     Bitboard up_left_low_right_mask = 0b1000000001000000001000000001000000001000000001000000001000000001;
     Bitboard low_left_up_right_mask = 0b0000000100000010000001000000100000010000001000000100000010000000;
-    // move = move |  (up_left_low_right_mask << location);
-    // move = move |  (up_left_low_right_mask >> (63 -location));
+    mask = mask |  (up_left_low_right_mask << location);
+    mask = mask |  (up_left_low_right_mask >> (63 -location));
 
-    // move_ll_tp = move_ll_tp |  (low_left_up_right_mask << location);
-    move_ll_tp = move_ll_tp |  (low_left_up_right_mask >>(63 -location));
+    mask = mask |  (low_left_up_right_mask << location);
+    mask = mask |  (low_left_up_right_mask << (64 -location));
 
-    debug_board(move_ll_tp);
+    // debug_board(mask);
     move_ll_tp &= clearAFile;
-    debug_board(move_ll_tp);
 
 
 
@@ -279,7 +280,6 @@ Bitboard get_horse_moves(int location, Bitboard invalid_locations, struct GameBo
 
     move &= ~invalid_locations;
 
-    debug_board(move);
     return move;
 }
 

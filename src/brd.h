@@ -76,6 +76,8 @@ extern const Bitboard clearFFile;
 extern const Bitboard clearGFile;
 extern const Bitboard clearHFile;
 
+extern Bitboard bish_mask[64];
+
 struct GameBoard
 {
     //computer pieces
@@ -102,5 +104,7 @@ void init_board();
 void update_extra_boards();
 struct GameBoard get_board();
 void debug_board(Bitboard brd);
+void init_masks();
+uint64_t swap_uint64( uint64_t val );
 
 #endif
