@@ -124,11 +124,11 @@ int get_moves_for_type(struct GameBoard gm_brd, struct MoveInfo *move_list, int 
 
 void print_moves(struct MoveInfo *moves, int size) {
     int i;
-    printf("\nMove List:   --------------------------------------------\n");
+    // printf("\nMove List:   --------------------------------------------\n");
     for (i=0; i<size;i++) {
-        printf("At: %d - Start: %d, End: %d, Piece Type: %d,  Piece Cap: %d\n", i, moves[i].start, moves[i].end, moves[i].piece_type, moves[i].piece_cap);
+        // printf("At: %d - Start: %d, End: %d, Piece Type: %d,  Piece Cap: %d\n", i, moves[i].start, moves[i].end, moves[i].piece_type, moves[i].piece_cap);
     }
-    printf("End Move List: --------------------------------------------\n\n");
+    // printf("End Move List: --------------------------------------------\n\n");
 
 }
 
@@ -224,9 +224,121 @@ Bitboard get_king_moves(int location, Bitboard invalid_locations, struct GameBoa
 Bitboard get_bishop_moves(int location, Bitboard invalid_locations, struct GameBoard gm_brd) {
     Bitboard loc = 0b01;
     loc = loc << location;
-    Bitboard move;
-    move = bish_mask[location];
-    // move = move & ~loc;
+    Bitboard move, left, right, uleft, uright, dleft, dright, temp;
+
+    Bitboard diag_rl = 0b1000000001000000001000000001000000001000000001000000001000000001;
+    Bitboard diag_lr = 0b1000000100000010000001000000100000010000001000000100000010000001;
+
+    //upper left
+    uleft = diag_rl >> (63 - location);
+    // uleft ^= loc;
+
+    if (uleft & gm_brd.all_pieces) {
+        temp = uleft;
+        Bitboard offset;
+        while( temp) {
+            offset = __builtin_ctzll(temp);
+            temp = temp >> (offset + 1);
+            temp = temp << (offset + 1);
+            if (temp == 0 ) {
+                uleft = 0;
+                break;
+            }
+            if (!(temp & (gm_brd.all_pieces ^ loc))) {
+                uleft = temp;
+                temp = 1 << (offset);
+
+                uleft |= temp;
+                break;
+            }
+
+        }
+    }
+
+    //lower left
+    dleft = diag_lr << (location);
+    // dleft ^= loc;
+    if (dleft & gm_brd.all_pieces) {
+        temp = dleft;
+        Bitboard offset;
+        while( temp) {
+            offset = __builtin_clzll(temp);
+            temp = temp << (offset + 1);
+            temp = temp >> (offset + 1);
+            if (temp == 0 ) {
+                dleft = 0;
+                break;
+            }
+            if (!(temp & (gm_brd.all_pieces ^ loc))) {
+                dleft = temp;
+                int shift = 63 - offset;
+                temp = 1;
+                temp = temp << shift;
+
+                dleft |= temp;
+                break;
+            }
+
+        }
+    }
+    //combine upper left and down left
+    left = uleft | dleft;
+    // debug_board(left);
+    //clear the right side
+
+
+    // move |= diag_rl >> (63 - location);
+
+    int column = location % 8;
+    switch(column) {
+        case 0:
+            left = 0;
+            right &= cl_l_b;
+            break;
+        case 1:
+            left &= cl_r_a;
+            right &= cl_l_c;
+            break;
+        case 2:
+            left &= cl_r_b;
+            right &= cl_l_d;
+            break;
+        case 3:
+            left &= cl_r_c;
+            right &= cl_l_e;
+            break;
+        case 4:
+            left &= cl_r_d;
+            right &= cl_l_f;
+            break;
+        case 5:
+            left &= cl_r_e;
+            right &= cl_l_g;
+            break;
+        case 6:
+            left &= cl_r_f;
+            right &= cl_l_h;
+            break;
+        case 7:
+            left &= cl_r_g;
+            right = 0;
+            break;
+    }
+
+    //if its a human piece, only let backwards if senior
+    if (invalid_locations == gm_brd.human_pieces) {
+
+    } else {
+        
+    }
+
+
+
+    move = left;
+    move &= ~loc;
+    move &= valid_mask;
+    move &= ~invalid_locations;
+    move &= bish_mask[location];
     debug_board(move);
     return move;
 
@@ -237,14 +349,14 @@ Bitboard get_horse_moves(int location, Bitboard invalid_locations, struct GameBo
     move = 0;
     loc = loc << location;
 
-    clip_1 = clearAFile & clearBFile;
-    clip_2 = clearAFile;
-    clip_3 = clearHFile;
-    clip_4 = clearHFile & clearGFile;
-    clip_5 = clearHFile & clearGFile;
-    clip_6 = clearHFile;
-    clip_7 = clearAFile;
-    clip_8 = clearAFile & clearBFile;
+    clip_1 = clearHFile & clearGFile;
+    clip_2 = clearHFile;
+    clip_3 = clearAFile;
+    clip_4 = clearAFile & clearBFile;
+    clip_5 = clearAFile & clearBFile;
+    clip_6 = clearAFile;
+    clip_7 = clearHFile;
+    clip_8 = clearHFile & clearGFile;
 
     move |= (loc & clip_4) >> 10;
     move |= (loc & clip_3) >> 17;

@@ -76,6 +76,9 @@ extern const Bitboard clearFFile;
 extern const Bitboard clearGFile;
 extern const Bitboard clearHFile;
 
+extern Bitboard cl_r_a, cl_l_a, cl_r_b, cl_l_b, cl_r_c, cl_l_c, cl_r_d, cl_l_d, cl_r_e, cl_l_e, cl_r_f, cl_l_f, cl_r_g, cl_l_g, cl_r_h, cl_l_h;
+
+
 extern Bitboard bish_mask[64];
 
 struct GameBoard

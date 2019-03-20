@@ -75,14 +75,16 @@ const int H6 = 47;
 typedef uint64_t Bitboard;
 
 const Bitboard valid_mask = 0b0000000000000000111111111111111111111111111111111111111111111111;
-const Bitboard clearAFile = 0b011111110111111101111111011111110111111101111111;
-const Bitboard clearBFile = 0b101111111011111110111111101111111011111110111111;
-const Bitboard clearCFile = 0b110111111101111111011111110111111101111111011111;
-const Bitboard clearDFile = 0b111011111110111111101111111011111110111111101111;
-const Bitboard clearEFile = 0b111101111111011111110111111101111111011111110111;
-const Bitboard clearFFile = 0b111110111111101111111011111110111111101111111011;
-const Bitboard clearGFile = 0b111111011111110111111101111111011111110111111101;
-const Bitboard clearHFile = 0b111111101111111011111110111111101111111011111110;
+const Bitboard clearHFile = 0b011111110111111101111111011111110111111101111111;
+const Bitboard clearGFile = 0b101111111011111110111111101111111011111110111111;
+const Bitboard clearFFile = 0b110111111101111111011111110111111101111111011111;
+const Bitboard clearEFile = 0b111011111110111111101111111011111110111111101111;
+const Bitboard clearDFile = 0b111101111111011111110111111101111111011111110111;
+const Bitboard clearCFile = 0b111110111111101111111011111110111111101111111011;
+const Bitboard clearBFile = 0b111111011111110111111101111111011111110111111101;
+const Bitboard clearAFile = 0b111111101111111011111110111111101111111011111110;
+
+Bitboard cl_r_a, cl_l_a, cl_r_b, cl_l_b, cl_r_c, cl_l_c, cl_r_d, cl_l_d, cl_r_e, cl_l_e, cl_r_f, cl_l_f, cl_r_g, cl_l_g, cl_r_h, cl_l_h;
 
 Bitboard bish_mask[64];
 
@@ -137,24 +139,36 @@ void init_masks() {
     bish_mask[6] = 0b000000100000010000001000000100001010000000000000;
     bish_mask[7] = 0b000001000000100000010000001000000100000000000000;
 
-    for(i=0; i<48; i++) {
-        if (bish_mask[i]) {
-            // bish_mask[i] = swap_uint64(bish_mask[i]);
-            // debug_board(bish_mask[i]);
-        }
-    }
+
+    //clear files
+    cl_r_a = clearBFile & clearCFile & clearDFile & clearEFile & clearFFile & clearGFile & clearHFile;
+    cl_r_b = clearCFile & clearDFile & clearEFile & clearFFile & clearGFile & clearHFile;
+    cl_r_c = clearDFile & clearEFile & clearFFile & clearGFile & clearHFile;
+    cl_r_d = clearEFile & clearFFile & clearGFile & clearHFile;
+    cl_r_e = clearFFile & clearGFile & clearHFile;
+    cl_r_f = clearGFile & clearHFile;
+    cl_r_g = clearHFile;
+
+    cl_l_h = clearAFile & clearBFile & clearCFile & clearDFile & clearEFile & clearFFile & clearGFile;
+    cl_l_g = clearAFile & clearBFile & clearCFile & clearDFile & clearEFile & clearFFile;
+    cl_l_f = clearAFile & clearBFile & clearCFile & clearDFile & clearEFile;
+    cl_l_e = clearAFile & clearBFile & clearCFile & clearDFile;
+    cl_l_d = clearAFile & clearBFile & clearCFile;
+    cl_l_c = clearAFile & clearBFile;
+    cl_l_b = clearAFile;
+
 }
 
 void init_board() {
     game_board.human_kings      = 0b0000000000000000000110000000000000000000000000000000000000000000;
-    game_board.human_bishops    = 0b0000000000000000110000000000000000000000000000000000000000000000;
+    game_board.human_bishops    = 0b0000000000000000110000000000000000000000000000001000000100000100;
     game_board.human_horses     = 0b0000000000000000000000110000000000000000000000000000000000000000;
     game_board.human_pawns      = 0b0000000000000000000000000011111000000000000000000000000000000000;
 
-    game_board.comp_kings     = 0b0000000000000000000000000000000000000000000000000000000000011000;
-    game_board.comp_bishops   = 0b0000000000000000000000000000000000000000000000000000000011000000;
-    game_board.comp_horses    = 0b0000000000000000000000000000000000000000000000000000000000000011;
-    game_board.comp_pawns     = 0b0000000000000000000000000000000000000000000000000111111000000000;
+    game_board.comp_kings       = 0b0000000000000000000000000000000000000000000000000000000000011000;
+    game_board.comp_bishops     = 0b0000000000000000000000000000000000000000000000000000000011000000;
+    game_board.comp_horses      = 0b0000000000000000000000000000000000000000000000000000000000000011;
+    game_board.comp_pawns       = 0b0000000000000000000000000000000000000000000000000111111000000000;
     
     update_extra_boards();
 }
