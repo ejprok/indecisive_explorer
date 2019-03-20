@@ -16,7 +16,6 @@ int main(int argc, char **argv) {
     init_board();
     init_masks();
 
-
     gen_human_moves(get_board());
     //get the first player
     ask_which_player();

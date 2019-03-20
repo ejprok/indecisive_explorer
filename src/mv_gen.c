@@ -224,32 +224,10 @@ Bitboard get_king_moves(int location, Bitboard invalid_locations, struct GameBoa
 Bitboard get_bishop_moves(int location, Bitboard invalid_locations, struct GameBoard gm_brd) {
     Bitboard loc = 0b01;
     loc = loc << location;
-    Bitboard mask, move;
-    Bitboard move_tl_lr = 0;
-    Bitboard move_ll_tp = 0;
-    move = 0;
-    mask = 0;
-    Bitboard up_left_low_right_mask = 0b1000000001000000001000000001000000001000000001000000001000000001;
-    Bitboard low_left_up_right_mask = 0b0000000100000010000001000000100000010000001000000100000010000000;
-    mask = mask |  (up_left_low_right_mask << location);
-    mask = mask |  (up_left_low_right_mask >> (63 -location));
-
-    mask = mask |  (low_left_up_right_mask << location);
-    mask = mask |  (low_left_up_right_mask << (64 -location));
-
-    // debug_board(mask);
-    move_ll_tp &= clearAFile;
-
-
-
-    //chop off last 8 bits and and with 10000001, this will tell if there is something on the edge
-    
-
-
-
-    move = move & valid_mask;
-    move = move & ~loc;
-
+    Bitboard move;
+    move = bish_mask[location];
+    // move = move & ~loc;
+    debug_board(move);
     return move;
 
 }
