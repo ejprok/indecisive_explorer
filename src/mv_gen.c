@@ -7,7 +7,7 @@
 struct MoveInfo* gen_human_moves(struct GameBoard gm_brd ) {
     //inialize the array of moves
     struct MoveInfo *move_list = malloc(1000 * sizeof *move_list);
-    int move_list_size = 0;
+    int move_list_size = 1;
 
      //////////////////////////////////////////////////////////////
     //KINGS
@@ -23,8 +23,10 @@ struct MoveInfo* gen_human_moves(struct GameBoard gm_brd ) {
     //check the pawns
     move_list_size = get_moves_for_type(gm_brd, move_list, move_list_size, 4);
 
-    print_moves(move_list, move_list_size);
+    // print_moves(move_list, move_list_size);
 
+    //set the first elements start to the size of the move list
+    move_list[0].start = move_list_size;
     return move_list;
 
 }
@@ -124,11 +126,11 @@ int get_moves_for_type(struct GameBoard gm_brd, struct MoveInfo *move_list, int 
 
 void print_moves(struct MoveInfo *moves, int size) {
     int i;
-    // printf("\nMove List:   --------------------------------------------\n");
+    printf("\nMove List:   --------------------------------------------\n");
     for (i=0; i<size;i++) {
-        // printf("At: %d - Start: %d, End: %d, Piece Type: %d,  Piece Cap: %d\n", i, moves[i].start, moves[i].end, moves[i].piece_type, moves[i].piece_cap);
+        printf("At: %d - Start: %d, End: %d, Piece Type: %d,  Piece Cap: %d\n", i, moves[i].start, moves[i].end, moves[i].piece_type, moves[i].piece_cap);
     }
-    // printf("End Move List: --------------------------------------------\n\n");
+    printf("End Move List: --------------------------------------------\n\n");
 
 }
 
@@ -282,14 +284,84 @@ Bitboard get_bishop_moves(int location, Bitboard invalid_locations, struct GameB
         }
     }
     //combine upper left and down left
-    left = uleft | dleft;
-    // debug_board(left);
-    //clear the right side
+    
+    //upper right
+    uright = diag_lr >> (63 - location);
+    if (uright & gm_brd.all_pieces) {
+        temp = uright;
+        Bitboard offset;
+        while( temp) {
+            offset = __builtin_ctzll(temp);
+            temp = temp >> (offset + 1);
+            temp = temp << (offset + 1);
+            if (temp == 0 ) {
+                uright = 0;
+                break;
+            }
+            if (!(temp & (gm_brd.all_pieces ^ loc))) {
+                uright = temp;
+                temp = 1 << (offset);
 
+                uright |= temp;
+                break;
+            }
 
-    // move |= diag_rl >> (63 - location);
+        }
+    }
+
+    dright = diag_rl << (location);
+    // dright ^= loc;
+    if (dright & gm_brd.all_pieces) {
+        temp = dright;
+        Bitboard offset;
+        while( temp) {
+            offset = __builtin_clzll(temp);
+            temp = temp << (offset + 1);
+            temp = temp >> (offset + 1);
+            if (temp == 0 ) {
+                dright = 0;
+                break;
+            }
+            if (!(temp & (gm_brd.all_pieces ^ loc))) {
+                dright = temp;
+                int shift = 63 - offset;
+                temp = 1;
+                temp = temp << shift;
+
+                dright |= temp;
+                break;
+            }
+
+        }
+    }
+
 
     int column = location % 8;
+
+
+    //if its a human piece, only let backwards if senior and capture
+    if (invalid_locations == gm_brd.human_pieces) {
+        left = uleft;
+        // debug_board(left);
+        right = uright;
+
+        //if senior
+        if (location <= 23) {
+            left |= (dleft & gm_brd.comp_pieces );
+            right |= (dright & gm_brd.comp_pieces);
+        }
+        
+    } else {
+        left = dleft;
+        right = dright;
+        //if senior
+        if (location > 23) {
+            left |= (uleft & gm_brd.human_pieces );
+            right |= (uright & gm_brd.human_pieces);
+        }
+
+    }
+
     switch(column) {
         case 0:
             left = 0;
@@ -325,28 +397,21 @@ Bitboard get_bishop_moves(int location, Bitboard invalid_locations, struct GameB
             break;
     }
 
-    //if its a human piece, only let backwards if senior
-    if (invalid_locations == gm_brd.human_pieces) {
-
-    } else {
-        
-    }
-
-
-
     move = left;
+    move |= right;
     move &= ~loc;
     move &= valid_mask;
     move &= ~invalid_locations;
     move &= bish_mask[location];
-    debug_board(move);
+    // debug_board(move);
     return move;
 
 }
 Bitboard get_horse_moves(int location, Bitboard invalid_locations, struct GameBoard gm_brd) {
-    Bitboard move, clip_1, clip_2, clip_3, clip_4, clip_5, clip_6, clip_7, clip_8;
+    Bitboard move, clip_1, clip_2, clip_3, clip_4, clip_5, clip_6, clip_7, clip_8, backwards;
     Bitboard loc = 0b01;
     move = 0;
+    backwards = 0;
     loc = loc << location;
 
     clip_1 = clearHFile & clearGFile;
@@ -358,16 +423,45 @@ Bitboard get_horse_moves(int location, Bitboard invalid_locations, struct GameBo
     clip_7 = clearHFile;
     clip_8 = clearHFile & clearGFile;
 
-    move |= (loc & clip_4) >> 10;
-    move |= (loc & clip_3) >> 17;
-    move |= (loc & clip_2) >> 15;
-    move |= (loc & clip_1) >> 6;
 
-    move |= (loc & clip_5) << 6;
-    move |= (loc & clip_6) << 15;
-    move |= (loc & clip_7) << 17;
-    move |= (loc & clip_8) << 10;
 
+
+
+    //if its a human piece, only let backwards if senior and capture
+    if (invalid_locations == gm_brd.human_pieces) {
+
+        move |= (loc & clip_4) >> 10;
+        move |= (loc & clip_3) >> 17;
+        move |= (loc & clip_2) >> 15;
+        move |= (loc & clip_1) >> 6;
+
+        //if senior
+        if (location <= 23) {
+            backwards |= (loc & clip_5) << 6;
+            backwards |= (loc & clip_6) << 15;
+            backwards |= (loc & clip_7) << 17;
+            backwards |= (loc & clip_8) << 10;
+            backwards &= gm_brd.comp_pieces;
+        }
+        
+    } else {
+        move |= (loc & clip_5) << 6;
+        move |= (loc & clip_6) << 15;
+        move |= (loc & clip_7) << 17;
+        move |= (loc & clip_8) << 10;
+
+        //if senior
+        if (location > 23) {
+            backwards |= (loc & clip_4) >> 10;
+            backwards |= (loc & clip_3) >> 17;
+            backwards |= (loc & clip_2) >> 15;
+            backwards |= (loc & clip_1) >> 6;
+            backwards &= gm_brd.human_pieces;
+        }
+
+    }
+
+    move |= backwards;
     move &= ~invalid_locations;
 
     return move;
