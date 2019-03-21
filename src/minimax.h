@@ -16,10 +16,11 @@ struct MoveScore
 };
 
 
-struct MoveInfo minimax();
+struct MoveInfo ids();
+struct MoveInfo minimax(int max_depth, time_t start_time);
 
-int min(int depth, struct MoveScore parent);
-int max(int depth, struct MoveScore parent);
-int evaluate();
+int min(int depth, int max_depth, struct MoveScore parent, time_t start_time);
+int max(int depth, int max_depth, struct MoveScore parent, time_t start_time);
+int evaluate(int depth);
 
 #endif

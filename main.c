@@ -84,10 +84,10 @@ void human_move() {
 void computer_move() {
 
     player_turn = 'h';
-    struct MoveInfo comp_move = minimax();
+    struct MoveInfo comp_move = ids();
     apply_move(comp_move);
     print_game_history();
-    debug_board(get_board().human_bishops);
+
 
 }
 
