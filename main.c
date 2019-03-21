@@ -86,7 +86,17 @@ void computer_move() {
     player_turn = 'h';
     struct MoveInfo comp_move = ids();
     apply_move(comp_move);
+    char *start_str =malloc(2*sizeof start_str);
+    start_str = convert_index_to_str(comp_move.start);
+    char *end_str = malloc(2*sizeof end_str);
+    end_str = convert_index_to_str(comp_move.end);
     print_game_history();
+    int row_start = 7 - (start_str[1] - '0');
+    int row_end = 7 - (end_str[1] - '0');
+
+    printf("\nComputer made move: %c%c%c%c (%c%d%c%d)\n", 
+        start_str[0], start_str[1], end_str[0], end_str[1],
+        start_str[0], row_start, end_str[0], row_end );
 
 
 }

@@ -1,27 +1,33 @@
 #include "minimax.h"
 
-const int MAX_DEPTH = 9;
+const int MAX_DEPTH = 20;
 
 struct MoveInfo ids () {
     int i;
-    struct MoveInfo move;
+    struct MoveScore move;
+    move.score = -9999;
+    struct MoveScore temp;
     printf("computer is thinking...\n");
     time_t start_time = time(0);
 
-    for (i=1; i<MAX_DEPTH; i++) {
+    for (i=1; i<=MAX_DEPTH; i++) {
         if(difftime(time(0), start_time) >= 5.0) {
             break;
         }
         printf("Searching a depth %d\n",i );
-        move = minimax(i, start_time);
+        
+        temp = minimax(i, start_time);
+        if (temp.score > move.score ) {
+            move = temp;
+        }
     }
     time_t end_time = difftime(time(0), start_time);
     int end_depth = i - 1;
     printf("Searched to a depth of: %d in %ld secs\n", end_depth, end_time);
-    return move;
+    return move.move;
 }
 
-struct MoveInfo minimax(int max_depth, time_t start_time) {
+struct MoveScore minimax(int max_depth, time_t start_time) {
     struct MoveInfo best_move;
     struct MoveScore best;
     struct MoveScore move;
@@ -48,12 +54,13 @@ struct MoveInfo minimax(int max_depth, time_t start_time) {
         undo_move();
         if(difftime(time(0), start_time) >= 5.0) {
             break;
+        
         }
 
     }
 
     free(computer_moves);
-    return best.move;
+    return best;
 }
 
 int max(int depth, int max_depth, struct MoveScore parent, time_t start_time) {
@@ -152,18 +159,45 @@ int evaluate(int depth) {
     struct GameBoard gm_brd;
     gm_brd = get_board();
     int score = 0;
-    while(gm_brd.comp_pieces) {
-        if (gm_brd.comp_pieces & 0b01) {
-            score++;
+    int piece_score = 0;
+    int loc_score = 0;
+
+    Bitboard flag = 1;
+    flag = flag << 47;
+    int location = 47;
+    while(flag) {
+        if(flag & gm_brd.comp_kings) {
+            piece_score += 8;
         }
-        gm_brd.comp_pieces = gm_brd.comp_pieces >> 1;
-    }
-    while(gm_brd.human_pieces) {
-        if (gm_brd.human_pieces & 0b01) {
-            score--;
+        if (flag & gm_brd.comp_bishops) {
+            piece_score += 4;
+            loc_score += location;
         }
-        gm_brd.human_pieces = gm_brd.human_pieces >> 1;
+        if (flag & gm_brd.comp_horses) {
+            piece_score += 4;
+            loc_score += location;
+        }
+        if (flag & gm_brd.comp_pawns) {
+            piece_score += 1;
+        }
+        if(flag & gm_brd.human_kings) {
+            piece_score -= 8;
+        }
+        if (flag & gm_brd.human_bishops) {
+            piece_score -= 4;
+            loc_score -= (47-location);
+        }
+        if (flag & gm_brd.human_horses) {
+            piece_score -= 4;
+            loc_score -= (47-location);
+        }
+        if (flag & gm_brd.human_pawns) {
+            piece_score -= 1;
+        }
+        flag = flag >> 1;
+        location--;
     }
+    score = (20*piece_score) + (2*loc_score);
     return score;
 
 }
