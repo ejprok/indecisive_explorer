@@ -177,6 +177,10 @@ struct GameBoard get_board() {
     return game_board;
 }
 
+void update_board(struct GameBoard brd) {
+    game_board = brd;
+}
+
 void update_extra_boards() {
     game_board.comp_pieces = game_board.comp_kings | game_board.comp_bishops | game_board.comp_horses | game_board.comp_pawns;
     game_board.human_pieces = game_board.human_kings | game_board.human_bishops | game_board.human_horses | game_board.human_pawns;
@@ -231,7 +235,7 @@ void print_board() {
 
     }
     printf("\n\t   ------------------------" ANSI_COLOR_BLUE " Human\n" ANSI_COLOR_RESET);
-    printf("\t    A  B  C  D  E  F  G  H \n");
+    printf("\t    A  B  C  D  E  F  G  H \n\n\n");
 
 }
 

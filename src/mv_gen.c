@@ -211,11 +211,11 @@ Bitboard get_king_moves(int location, Bitboard invalid_locations, struct GameBoa
         return 0;
     }
     //if leftwing king
-    if ((location <= 3 ) || (location <= 43 && location > 4)) {
+    if ((location <= 3 ) || (location <= 43 && location > 3)) {
         move = loc >> 1;
     }
     //if rightwing king 
-    if ((location >= 4 && location < 43) || (location >= 44)){
+    if ((location >= 4 && location < 39) || (location >= 44)){
         move = loc << 1;
     }   
     move = move & ~invalid_locations;
