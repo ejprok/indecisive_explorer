@@ -167,18 +167,18 @@ int evaluate(int depth) {
     int location = 47;
     while(flag) {
         if(flag & gm_brd.comp_kings) {
-            piece_score += 8;
+            piece_score += 12;
         }
         if (flag & gm_brd.comp_bishops) {
-            piece_score += 4;
+            piece_score += 6;
             loc_score += location;
         }
         if (flag & gm_brd.comp_horses) {
-            piece_score += 4;
+            piece_score += 6;
             loc_score += location;
         }
         if (flag & gm_brd.comp_pawns) {
-            piece_score += 1;
+            piece_score += 2;
         }
         if(flag & gm_brd.human_kings) {
             piece_score -= 8;
