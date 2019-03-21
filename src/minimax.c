@@ -197,7 +197,7 @@ int evaluate(int depth) {
         flag = flag >> 1;
         location--;
     }
-    score = (20*piece_score) + (2*loc_score);
+    score = (40*piece_score) + (2*loc_score);
     return score;
 
 }
