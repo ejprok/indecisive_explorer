@@ -311,7 +311,8 @@ int check_valid_input(char* input, char** move_string_list, int list_size) {
     int move_location_start = convert_str_to_index(input);
     int move_location_end   = convert_str_to_index(&input[2]);
     int flag = 0;
-    for (int i=1; i< list_size; i++) {
+    int i=1;
+    for (i=1; i< list_size; i++) {
         int valid_move_start   = convert_str_to_index(move_string_list[i]);
         int valid_move_end = convert_str_to_index(&move_string_list[i][2]);
         if ((move_location_start == valid_move_start) && (move_location_end == valid_move_end))

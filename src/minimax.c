@@ -21,7 +21,7 @@ struct MoveInfo minimax() {
         //make a move
         move.move = computer_moves[i];
         apply_move(move.move);
-        move.score = min(depth+1);
+        move.score = min(depth+1, best);
         printf("move score: %d\n", move.score) ;
         if (move.score > best.score) {
             best = move;
@@ -34,7 +34,7 @@ struct MoveInfo minimax() {
     return best.move;
 }
 
-int max(int depth) {
+int max(int depth, struct MoveScore parent) {
     struct MoveInfo best_move;
     struct MoveScore best;
     struct MoveScore move;
@@ -60,12 +60,15 @@ int max(int depth) {
             move.move = computer_moves[i];
             apply_move(move.move);
 
-            move.score = min(depth+1); 
+            move.score = min(depth+1, best); 
             if (move.score > best.score) {
                 best = move;
             }
             undo_move();
-
+            if(move.score > parent.score) {
+                free(computer_moves);
+                return move.score;
+            }
         }
         free(computer_moves);
 
@@ -74,7 +77,7 @@ int max(int depth) {
 
 }
 
-int min(int depth) {
+int min(int depth, struct MoveScore parent) {
     struct MoveInfo best_move;
 
     struct MoveScore best;
@@ -101,12 +104,15 @@ int min(int depth) {
             //make a move
             move.move = human_moves[i];
             apply_move(move.move);
-            move.score = max(depth+1); 
+            move.score = max(depth+1, best); 
             if (move.score < best.score) {
                 best = move;
             }
             undo_move();
-
+            if(move.score < parent.score) {
+                free(human_moves);
+                return move.score;
+            }
         }
         free(human_moves);
         return best.score;

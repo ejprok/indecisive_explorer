@@ -18,8 +18,8 @@ struct MoveScore
 
 struct MoveInfo minimax();
 
-int min(int depth);
-int max(int depth);
+int min(int depth, struct MoveScore parent);
+int max(int depth, struct MoveScore parent);
 int evaluate();
 
 #endif
