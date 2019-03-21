@@ -1,6 +1,6 @@
 #include "minimax.h"
 
-const int MAX_DEPTH = 6;
+const int MAX_DEPTH = 7;
 
 struct MoveInfo minimax() {
     struct MoveInfo best_move;
@@ -11,7 +11,7 @@ struct MoveInfo minimax() {
     int gameover = 0;
     struct MoveInfo *computer_moves = malloc(1000*sizeof computer_moves);
     move.score = -9999;
-    int depth = 0;
+    int depth = 1;
 
     computer_moves = gen_computer_moves(get_board());
     int size = computer_moves[0].start;
@@ -39,10 +39,10 @@ int max(int depth) {
     struct MoveScore best;
     struct MoveScore move;
 
-    best.score = 9999;
+    best.score = -9999;
     int gameover = 0;
     struct MoveInfo *computer_moves = malloc(1000*sizeof computer_moves);
-    move.score = 9999;
+    move.score = -9999;
 
     if (gameover) {
         free(computer_moves);
@@ -80,10 +80,10 @@ int min(int depth) {
     struct MoveScore best;
     struct MoveScore move;
 
-    best.score= -9999;
+    best.score= 9999;
     int gameover = 0;
     struct MoveInfo *human_moves = malloc(1000*sizeof human_moves);
-    move.score = -9999;
+    move.score = 9999;
 
     if (gameover) {
         //gameover

@@ -504,12 +504,12 @@ Bitboard get_pawn_moves(int location, Bitboard invalid_locations, struct GameBoa
     if(invalid_locations == gm_brd.human_pieces) {
         //right
         move_r |= loc >> 9;
-        move_r &= clearAFile;
+        move_r &= clearHFile;
         move_r &= gm_brd.comp_pieces;
 
         //left 
         move_l |= loc >> 7;
-        move_l &= clearHFile;
+        move_l &= clearAFile;
         move_l &= gm_brd.comp_pieces;
 
         //forward move

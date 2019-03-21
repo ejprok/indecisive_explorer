@@ -108,6 +108,7 @@ void update_board(struct GameBoard brd);
 void update_extra_boards();
 struct GameBoard get_board();
 void debug_board(Bitboard brd);
+void textcolor(int attr, int fg, int bg);
 void init_masks();
 uint64_t swap_uint64( uint64_t val );
 
