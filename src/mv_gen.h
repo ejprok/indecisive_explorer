@@ -12,8 +12,8 @@ struct MoveInfo
     
 };
 
-struct MoveInfo* gen_human_moves();
-void gen_computer_moves();
+struct MoveInfo* gen_human_moves(struct GameBoard gm_brd);
+struct MoveInfo* gen_computer_moves(struct GameBoard gm_brd);
 
 int* loop_thru_brd(Bitboard bit_brd, int start_bit, int end_bit);
 Bitboard* get_piece_locations(Bitboard bit_brd);

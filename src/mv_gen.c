@@ -6,7 +6,7 @@
 
 struct MoveInfo* gen_human_moves(struct GameBoard gm_brd ) {
     //inialize the array of moves
-    struct MoveInfo *move_list = malloc(1000 * sizeof *move_list);
+    struct MoveInfo *move_list = malloc(100 * sizeof *move_list);
     int move_list_size = 1;
 
      //////////////////////////////////////////////////////////////
@@ -30,6 +30,35 @@ struct MoveInfo* gen_human_moves(struct GameBoard gm_brd ) {
     return move_list;
 
 }
+
+
+struct MoveInfo* gen_computer_moves(struct GameBoard gm_brd ) {
+    //inialize the array of moves
+    struct MoveInfo *move_list = malloc(100 * sizeof *move_list);
+    int move_list_size = 1;
+
+     //////////////////////////////////////////////////////////////
+    //KINGS
+    move_list_size = get_moves_for_type(gm_brd, move_list, move_list_size, 5);
+
+     //////////////////////////////////////////////////////////////
+    //BISHOPS
+    move_list_size = get_moves_for_type(gm_brd, move_list, move_list_size, 6);
+
+    //check the horses
+    move_list_size = get_moves_for_type(gm_brd, move_list, move_list_size, 7);
+
+    //check the pawns
+    move_list_size = get_moves_for_type(gm_brd, move_list, move_list_size, 8);
+
+    // print_moves(move_list, move_list_size);
+
+    //set the first elements start to the size of the move list
+    move_list[0].start = move_list_size;
+    return move_list;
+
+}
+
 
 /*gets the moves for a type of piece and addes them to the movelist
     piece_type:
@@ -197,9 +226,6 @@ int check_attack(Bitboard location, struct GameBoard gm_brd, int piece_type) {
 
 }
 
-void gen_computer_moves() {
-
-}
 
 
 Bitboard get_king_moves(int location, Bitboard invalid_locations, struct GameBoard gm_brd) {

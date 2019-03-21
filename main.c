@@ -7,22 +7,13 @@ char player_turn = 'n';
 int move_history_index = 1;
 struct MoveInfo *move_history;
 
-void get_which_player();
-void ask_which_player();
-void game_loop();
-void check_game_over();
-void human_move();
-void computer_move();
-char* convert_index_to_str(int input);
-char* get_user_move();
-int check_valid_input(char* input, char** move_string_list, int list_size);
-void apply_move( struct MoveInfo move);
-void undo_move();
-void print_game_history();
+
 
 int main(int argc, char **argv) {
     //initial setup 
     move_history = malloc(1000 * sizeof move_history);
+    move_history[0].start = 0;
+    move_history[0].end = 0;
     init_board();
     init_masks();
     //get the first player
@@ -85,14 +76,19 @@ void human_move() {
 
     //using input, make a move
     apply_move(move_selected);
-    print_game_history();
     player_turn = 'c';
+    debug_board(get_board().human_bishops);
 
 }
 
 void computer_move() {
 
     player_turn = 'h';
+    struct MoveInfo comp_move = minimax();
+    apply_move(comp_move);
+    print_game_history();
+    debug_board(get_board().human_bishops);
+
 }
 
 //take a string as input and convert to an index
@@ -375,12 +371,20 @@ void apply_move(struct MoveInfo move) {
         case 6:
             //comp bishop
             gm_brd.comp_bishops &= ~start_loc;
-            gm_brd.comp_bishops |= end_loc;
+            if((move.end % 8) >=4 ) {
+                gm_brd.comp_bishops |= end_loc;
+            } else {
+                gm_brd.comp_horses |= end_loc;
+            }
             break;
         case 7:
             //comp horse
             gm_brd.comp_horses &= ~start_loc;
-            gm_brd.comp_horses |= end_loc;
+            if((move.end % 8) >=4 ) {
+                gm_brd.comp_bishops |= end_loc;
+            } else {
+                gm_brd.comp_horses |= end_loc;
+            } 
             break;
         case 8:
             //comp pawn
@@ -462,21 +466,29 @@ void undo_move() {
             break;
         case 2:
             //human bishop
-            gm_brd.human_bishops &= ~end_loc;
-            if((move.end % 8) >=4 ) {
+            if((move.start % 8) >=4 ) {
                 gm_brd.human_bishops |= start_loc;
             } else {
                 gm_brd.human_horses |= start_loc;
             }
+            if((move.end % 8) >=4 ) {
+                gm_brd.human_bishops &= ~end_loc;
+            } else {
+                gm_brd.human_horses &= ~end_loc;
+            }
             break;
         case 3:
             //human horse
-            gm_brd.human_horses &= ~end_loc;
-            if((move.end % 8) >=4 ) {
+            if((move.start % 8) >= 4 ) {
                 gm_brd.human_bishops |= start_loc;
             } else {
                 gm_brd.human_horses |= start_loc;
             } 
+            if((move.end % 8) >=4 ) {
+                gm_brd.human_bishops &= ~end_loc;
+            } else {
+                gm_brd.human_horses &= ~end_loc;
+            }
             break;
         case 4:
             //human pawn
@@ -490,13 +502,29 @@ void undo_move() {
             break;
         case 6:
             //comp bishop
-            gm_brd.comp_bishops &= ~end_loc;
-            gm_brd.comp_bishops |= start_loc;
+            if((move.start % 8) >=4 ) {
+                gm_brd.comp_bishops |= start_loc;
+            } else {
+                gm_brd.comp_horses |= start_loc;
+            }
+            if((move.end % 8) >=4 ) {
+                gm_brd.comp_bishops &= ~end_loc;
+            } else {
+                gm_brd.comp_horses &= ~end_loc;
+            }
             break;
         case 7:
             //comp horse
-            gm_brd.comp_horses &= ~end_loc;
-            gm_brd.comp_horses |= start_loc;
+            if((move.start % 8) >=4 ) {
+                gm_brd.comp_bishops |= start_loc;
+            } else {
+                gm_brd.comp_horses |= start_loc;
+            }
+            if((move.end % 8) >=4 ) {
+                gm_brd.comp_bishops &= ~end_loc;
+            } else {
+                gm_brd.comp_horses &= ~end_loc;
+            }
             break;
         case 8:
             //comp pawn
