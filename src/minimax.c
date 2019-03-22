@@ -14,17 +14,20 @@ struct MoveInfo ids () {
         if(difftime(time(0), start_time) >= 5.0) {
             break;
         }
-        printf("Searching a depth %d\n",i );
+        // printf("Searching a depth %d\n",i );
         
         temp = minimax(i, start_time);
         if (temp.score > -9999 ) {
             move = temp;
         }
+        if (move.score > 9000) {
+            break;
+        }
     }
     time_t end_time = difftime(time(0), start_time);
     int end_depth = i - 1;
     printf("Searched to a depth of: %d in %ld secs\n", end_depth, end_time);
-    printf("Found move with a score of: %d\n", move.score);
+    printf("Found move with a score of: %d\n\n\n", move.score);
     return move.move;
 }
 
@@ -47,11 +50,15 @@ struct MoveScore minimax(int max_depth, time_t start_time) {
         move.move = computer_moves[i];
         apply_move(move.move);
         move.score = min(depth+1,max_depth, best, start_time);
-        printf("move score: %d\n", move.score) ;
+        // printf("move score: %d\n", move.score) ;
         if (move.score > best.score) {
             best = move;
         }
         undo_move();
+        if(move.score > 9000) {
+            best = move;
+            break;
+        }
         if(difftime(time(0), start_time) >= 5.0) {
             best.score = -9999;
             break;
@@ -97,6 +104,10 @@ int max(int depth, int max_depth, struct MoveScore parent, time_t start_time) {
             if(move.score > parent.score) {
                 free(computer_moves);
                 return move.score;
+            }
+            if(move.score > 9000) {
+                best = move;
+                break;
             }
             if(difftime(time(0), start_time) >= 5.0) {
                 break;
@@ -146,6 +157,7 @@ int min(int depth, int max_depth, struct MoveScore parent, time_t start_time) {
             if(difftime(time(0), start_time) >= 5.0) {
                 break;
             }
+
         }
         free(human_moves);
         return best.score;
@@ -159,7 +171,13 @@ int evaluate(int depth) {
     int score = 0;
     int piece_score = 0;
     int loc_score = 0;
-
+    int game_status = check_game_over();
+    if (game_status == 1) {
+        return 9999 - depth;
+    }
+    if (game_status == 2) {
+        return -9999 + depth;
+    }
     Bitboard flag = 1;
     flag = flag << 47;
     int location = 47;

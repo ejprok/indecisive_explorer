@@ -26,16 +26,24 @@ int main(int argc, char **argv) {
 }
 
 void game_loop() {
+    print_board();
     while(1) {
 
-        print_board();
         if (player_turn == 'h') {
             human_move();
         } else if (player_turn == 'c') {
             computer_move();
         }
-        check_game_over();
-
+        int game_status = check_game_over();
+        if(game_status == 1) {
+            printf("Computer Wins\n\n");
+            print_board();
+            break;
+        } else if (game_status == 2) {
+            printf("Human Wins\n\n");
+            print_board();
+            break;
+        }
     }
 }
 
@@ -49,7 +57,7 @@ void human_move() {
     int i;
     int max = moves[0].start;
     char** move_string_list = malloc(100 * 4 * sizeof * move_string_list);
-    for (i=1; i<max; i++) {
+    for (i=1; i<=max; i++) {
         char* move_string = malloc(4*sizeof move_string);
         char* move_string_1 = convert_index_to_str(moves[i].start);
         char* move_string_2 = convert_index_to_str(moves[i].end); 
@@ -69,13 +77,14 @@ void human_move() {
     
         user_move = get_user_move();
     }
-    printf("Move is valid\n");
+    printf("Move is valid\n\n");
     int index = check_valid_input(user_move, move_string_list, max);
     struct MoveInfo move_selected = moves[index];
-    printf("The index is: %d\n", index);
+    // printf("The index is: %d\n", index);
 
     //using input, make a move
     apply_move(move_selected);
+    print_board();
     player_turn = 'c';
     free(moves);
 }
@@ -89,10 +98,10 @@ void computer_move() {
     start_str = convert_index_to_str(comp_move.start);
     char *end_str = malloc(2*sizeof end_str);
     end_str = convert_index_to_str(comp_move.end);
-    print_game_history();
+    // print_game_history();
     int row_start = 7 - (start_str[1] - '0');
     int row_end = 7 - (end_str[1] - '0');
-
+    print_board();
     printf("\nComputer made move: %c%c%c%c (%c%d%c%d)\n", 
         start_str[0], start_str[1], end_str[0], end_str[1],
         start_str[0], row_start, end_str[0], row_end );
@@ -323,7 +332,7 @@ int check_valid_input(char* input, char** move_string_list, int list_size) {
     int move_location_end   = convert_str_to_index(&input[2]);
     int flag = 0;
     int i=1;
-    for (i=1; i< list_size; i++) {
+    for (i=1; i<= list_size; i++) {
         int valid_move_start   = convert_str_to_index(move_string_list[i]);
         int valid_move_end = convert_str_to_index(&move_string_list[i][2]);
         if ((move_location_start == valid_move_start) && (move_location_end == valid_move_end))
@@ -625,6 +634,10 @@ int check_game_over() {
         return 1;
     }
     free(moves);
+    moves = gen_computer_moves(get_board());
+    if(!moves[0].start) {
+        return 2;
+    }
 }
 
 

@@ -145,7 +145,7 @@ int get_moves_for_type(struct GameBoard gm_brd, struct MoveInfo *move_list, int 
 
             move_list[move_list_size] = prepare_move(single_move, piece_locations[i], move_location, piece_cap, piece_type);
             //add the move to the list of moves
-            add_move(single_move, move_list, move_list_size);
+            // add_move(single_move, move_list, move_list_size);
         }
         
     }
@@ -234,7 +234,7 @@ Bitboard get_king_moves(int location, Bitboard invalid_locations, struct GameBoa
     loc = loc << location;
     Bitboard move;
     //check if the king is at edge of board
-    if (location == 47 || location == 39 || location == 7 || location == 0) {
+    if (location == 47 || location == 40 || location == 7 || location == 0) {
         return 0;
     }
     //if leftwing king
