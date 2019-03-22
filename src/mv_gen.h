@@ -1,7 +1,7 @@
 #ifndef _MV_GEN_
 #define _MV_GEN_
 #include "brd.h"
-typedef uint64_t Bitboard;
+
 struct MoveInfo
 {
     Bitboard move;

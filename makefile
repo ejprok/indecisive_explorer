@@ -2,7 +2,7 @@ default: main
 	./main
 
 compile: main.c 
-	gcc -o main main.c src/*.c
+	gcc -std=c99 -o main main.c src/*.c
 
 gdb_ready: main.c 
 	gcc -g -o main main.c src/*.c 
