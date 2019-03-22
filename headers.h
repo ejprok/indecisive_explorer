@@ -5,7 +5,7 @@
 void get_which_player();
 void ask_which_player();
 void game_loop();
-void check_game_over();
+int check_game_over();
 void human_move();
 void computer_move();
 char* convert_index_to_str(int input);

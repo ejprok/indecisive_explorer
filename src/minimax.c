@@ -17,18 +17,18 @@ struct MoveInfo ids () {
         printf("Searching a depth %d\n",i );
         
         temp = minimax(i, start_time);
-        if (temp.score > move.score ) {
+        if (temp.score > -9999 ) {
             move = temp;
         }
     }
     time_t end_time = difftime(time(0), start_time);
     int end_depth = i - 1;
     printf("Searched to a depth of: %d in %ld secs\n", end_depth, end_time);
+    printf("Found move with a score of: %d\n", move.score);
     return move.move;
 }
 
 struct MoveScore minimax(int max_depth, time_t start_time) {
-    struct MoveInfo best_move;
     struct MoveScore best;
     struct MoveScore move;
 
@@ -53,6 +53,7 @@ struct MoveScore minimax(int max_depth, time_t start_time) {
         }
         undo_move();
         if(difftime(time(0), start_time) >= 5.0) {
+            best.score = -9999;
             break;
         
         }
@@ -64,7 +65,6 @@ struct MoveScore minimax(int max_depth, time_t start_time) {
 }
 
 int max(int depth, int max_depth, struct MoveScore parent, time_t start_time) {
-    struct MoveInfo best_move;
     struct MoveScore best;
     struct MoveScore move;
 
@@ -110,8 +110,6 @@ int max(int depth, int max_depth, struct MoveScore parent, time_t start_time) {
 }
 
 int min(int depth, int max_depth, struct MoveScore parent, time_t start_time) {
-    struct MoveInfo best_move;
-
     struct MoveScore best;
     struct MoveScore move;
 
@@ -167,37 +165,37 @@ int evaluate(int depth) {
     int location = 47;
     while(flag) {
         if(flag & gm_brd.comp_kings) {
-            piece_score += 12;
+            piece_score += 20;
         }
         if (flag & gm_brd.comp_bishops) {
-            piece_score += 6;
+            piece_score += 10;
             loc_score += location;
         }
         if (flag & gm_brd.comp_horses) {
-            piece_score += 6;
+            piece_score += 10;
             loc_score += location;
         }
         if (flag & gm_brd.comp_pawns) {
-            piece_score += 2;
+            piece_score += 5;
         }
         if(flag & gm_brd.human_kings) {
-            piece_score -= 8;
+            piece_score -= 20;
         }
         if (flag & gm_brd.human_bishops) {
-            piece_score -= 4;
+            piece_score -= 10;
             loc_score -= (47-location);
         }
         if (flag & gm_brd.human_horses) {
-            piece_score -= 4;
+            piece_score -= 10;
             loc_score -= (47-location);
         }
         if (flag & gm_brd.human_pawns) {
-            piece_score -= 1;
+            piece_score -= 5;
         }
         flag = flag >> 1;
         location--;
     }
-    score = (40*piece_score) + (2*loc_score);
+    score = (40*piece_score) + (0*loc_score);
     return score;
 
 }

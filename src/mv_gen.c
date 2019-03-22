@@ -7,7 +7,7 @@
 struct MoveInfo* gen_human_moves(struct GameBoard gm_brd ) {
     //inialize the array of moves
     struct MoveInfo *move_list = malloc(100 * sizeof *move_list);
-    int move_list_size = 1;
+    int move_list_size = 0;
 
      //////////////////////////////////////////////////////////////
     //KINGS
@@ -35,7 +35,7 @@ struct MoveInfo* gen_human_moves(struct GameBoard gm_brd ) {
 struct MoveInfo* gen_computer_moves(struct GameBoard gm_brd ) {
     //inialize the array of moves
     struct MoveInfo *move_list = malloc(100 * sizeof *move_list);
-    int move_list_size = 1;
+    int move_list_size = 0;
 
      //////////////////////////////////////////////////////////////
     //KINGS
@@ -141,10 +141,11 @@ int get_moves_for_type(struct GameBoard gm_brd, struct MoveInfo *move_list, int 
             single_move = single_move << move_location;
             int piece_cap = check_attack(single_move, gm_brd, piece_type);
             //prepare the move's header
+            move_list_size++;
+
             move_list[move_list_size] = prepare_move(single_move, piece_locations[i], move_location, piece_cap, piece_type);
             //add the move to the list of moves
             add_move(single_move, move_list, move_list_size);
-            move_list_size++;
         }
         
     }

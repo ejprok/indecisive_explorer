@@ -34,7 +34,7 @@ void game_loop() {
         } else if (player_turn == 'c') {
             computer_move();
         }
-        // check_game_over();
+        check_game_over();
 
     }
 }
@@ -77,8 +77,7 @@ void human_move() {
     //using input, make a move
     apply_move(move_selected);
     player_turn = 'c';
-    debug_board(get_board().human_bishops);
-
+    free(moves);
 }
 
 void computer_move() {
@@ -98,7 +97,8 @@ void computer_move() {
         start_str[0], start_str[1], end_str[0], end_str[1],
         start_str[0], row_start, end_str[0], row_end );
 
-
+    free(start_str);
+    free(end_str);
 }
 
 //take a string as input and convert to an index
@@ -606,8 +606,25 @@ void print_game_history() {
     }
     printf("End Move History ------------------------\n");
 }
-void check_game_over() {
-    exit(1);
+
+int check_game_over() {
+    struct GameBoard gm_brd;
+    gm_brd = get_board();
+
+    if (!gm_brd.human_kings) {
+        //human loses
+        return 1;
+
+    }
+    if (!gm_brd.comp_kings) {
+        //comp loses
+        return 2;
+    }
+    struct MoveInfo *moves = gen_human_moves(get_board());
+    if (!moves[0].start) {
+        return 1;
+    }
+    free(moves);
 }
 
 
