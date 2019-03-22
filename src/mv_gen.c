@@ -274,8 +274,8 @@ Bitboard get_bishop_moves(int location, Bitboard invalid_locations, struct GameB
             }
             if (!(temp & (gm_brd.all_pieces ^ loc))) {
                 uleft = temp;
-                temp = 1 << (offset);
-
+                temp = 1;
+                temp = temp << (offset);
                 uleft |= temp;
                 break;
             }
@@ -326,7 +326,8 @@ Bitboard get_bishop_moves(int location, Bitboard invalid_locations, struct GameB
             }
             if (!(temp & (gm_brd.all_pieces ^ loc))) {
                 uright = temp;
-                temp = 1 << (offset);
+                temp = 1;
+                temp = temp << (offset);
 
                 uright |= temp;
                 break;

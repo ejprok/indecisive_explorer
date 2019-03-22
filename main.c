@@ -17,8 +17,8 @@ int main(int argc, char **argv) {
     init_board();
     init_masks();
     //get the first player
-    ask_which_player();
 
+    ask_which_player();
 
     //run the game loop
     game_loop();
