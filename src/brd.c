@@ -88,7 +88,7 @@ const int F6 = 45;
 const int G6 = 46;
 const int H6 = 47;
 
-typedef uint64_t Bitboard;
+typedef unsigned long long Bitboard;
 
 const Bitboard valid_mask = 0b0000000000000000111111111111111111111111111111111111111111111111;
 const Bitboard clearHFile = 0b011111110111111101111111011111110111111101111111;

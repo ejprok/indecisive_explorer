@@ -64,7 +64,7 @@ extern const int F6;
 extern const int G6;
 extern const int H6;
 
-typedef uint64_t Bitboard;
+typedef unsigned long long Bitboard;
 
 extern const Bitboard valid_mask;
 extern const Bitboard clearAFile;
@@ -110,6 +110,6 @@ struct GameBoard get_board();
 void debug_board(Bitboard brd);
 void textcolor(int attr, int fg, int bg);
 void init_masks();
-uint64_t swap_uint64( uint64_t val );
+unsigned long long swap_uint64( unsigned long long val );
 
 #endif
