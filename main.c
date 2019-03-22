@@ -638,6 +638,7 @@ int check_game_over() {
     if(!moves[0].start) {
         return 2;
     }
+    return 0;
 }
 
 

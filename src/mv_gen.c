@@ -37,9 +37,7 @@ struct MoveInfo* gen_computer_moves(struct GameBoard gm_brd ) {
     struct MoveInfo *move_list = malloc(100 * sizeof *move_list);
     int move_list_size = 0;
 
-     //////////////////////////////////////////////////////////////
-    //KINGS
-    move_list_size = get_moves_for_type(gm_brd, move_list, move_list_size, 5);
+
 
      //////////////////////////////////////////////////////////////
     //BISHOPS
@@ -50,6 +48,10 @@ struct MoveInfo* gen_computer_moves(struct GameBoard gm_brd ) {
 
     //check the pawns
     move_list_size = get_moves_for_type(gm_brd, move_list, move_list_size, 8);
+
+     //////////////////////////////////////////////////////////////
+    //KINGS
+    move_list_size = get_moves_for_type(gm_brd, move_list, move_list_size, 5);
 
     // print_moves(move_list, move_list_size);
 
