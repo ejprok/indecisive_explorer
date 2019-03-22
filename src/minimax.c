@@ -14,7 +14,7 @@ struct MoveInfo ids () {
         if(difftime(time(0), start_time) >= 5.0) {
             break;
         }
-        // printf("Searching a depth %d\n",i );
+        printf("Searching a depth %d\n",i );
         
         temp = minimax(i, start_time);
         if (temp.score > -9999 ) {
@@ -49,12 +49,12 @@ struct MoveScore minimax(int max_depth, time_t start_time) {
         move.move = computer_moves[i];
         apply_move(move.move);
         move.score = min(depth+1,max_depth, best, start_time);
-        // printf("move score: %d\n", move.score) ;
+        printf("move score: %d\n", move.score) ;
         if (move.score > best.score) {
             best = move;
         }
         undo_move();
-        if(move.score > 9000) {
+        if(move.score > 9000 && depth <= 2) {
             best = move;
             break;
         }
@@ -182,7 +182,7 @@ int evaluate(int depth) {
     int location = 47;
     while(flag) {
         if(flag & gm_brd.comp_kings) {
-            piece_score += 100;
+            piece_score += 150;
         }
         if (flag & gm_brd.comp_bishops) {
             piece_score += 10;
@@ -212,7 +212,7 @@ int evaluate(int depth) {
         flag = flag >> 1;
         location--;
     }
-    score = (40*piece_score) + (0.5*loc_score);
+    score = (30*piece_score) + (0*loc_score) - (30*50);
     return score;
 
 }

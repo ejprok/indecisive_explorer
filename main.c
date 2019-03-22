@@ -22,6 +22,8 @@ int main(int argc, char **argv) {
 
     //run the game loop
     game_loop();
+
+    free(move_history);
     //print out who wins/loses
 }
 
@@ -67,9 +69,9 @@ void human_move() {
         move_string[3] = move_string_2[1];
         move_string_list[i] = move_string;
         printf("%c%c%c%c  ", move_string[0], move_string[1], move_string[2], move_string[3]);
-        
+        free(move_string_1);
+        free(move_string_2);
     }
-
 
     //prompt for move
     char* user_move = get_user_move();
@@ -87,6 +89,11 @@ void human_move() {
     print_board();
     player_turn = 'c';
     free(moves);
+    free(user_move);
+    for (i=1; i<=max; i++) {
+        free(move_string_list[i]);
+    }
+    free(move_string_list);
 }
 
 void computer_move() {
@@ -95,10 +102,8 @@ void computer_move() {
     player_turn = 'h';
     struct MoveInfo comp_move = ids();
     apply_move(comp_move);
-    char *start_str =malloc(2*sizeof start_str);
-    start_str = convert_index_to_str(comp_move.start);
-    char *end_str = malloc(2*sizeof end_str);
-    end_str = convert_index_to_str(comp_move.end);
+    char *start_str = convert_index_to_str(comp_move.start);
+    char *end_str  = convert_index_to_str(comp_move.end);
     // print_game_history();
     int row_start = 7 - (start_str[1] - '0');
     int row_end = 7 - (end_str[1] - '0');
@@ -632,13 +637,16 @@ int check_game_over() {
     }
     struct MoveInfo *moves = gen_human_moves(get_board());
     if (!moves[0].start) {
+        free(moves);
         return 1;
     }
     free(moves);
     moves = gen_computer_moves(get_board());
     if(!moves[0].start) {
+        free(moves);
         return 2;
     }
+    free(moves);
     return 0;
 }
 
