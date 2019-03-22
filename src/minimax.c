@@ -14,7 +14,7 @@ struct MoveInfo ids () {
         if(difftime(time(0), start_time) >= 5.0) {
             break;
         }
-        printf("Searching a depth %d\n",i );
+        // printf("Searching a depth %d\n",i );
         
         temp = minimax(i, start_time);
         if (temp.score > -9999 ) {
@@ -49,7 +49,7 @@ struct MoveScore minimax(int max_depth, time_t start_time) {
         move.move = computer_moves[i];
         apply_move(move.move);
         move.score = min(depth+1,max_depth, best, start_time);
-        printf("move score: %d\n", move.score) ;
+        // printf("move score: %d\n", move.score) ;
         if (move.score > best.score) {
             best = move;
         }

@@ -50,7 +50,7 @@ void game_loop() {
 void human_move() {
     //get valid human moves
     struct MoveInfo *moves = gen_human_moves(get_board());
-
+    printf("---------------Human Turn---------------------\n");
     printf("\nHere are the valid moves:\n");
 
     //display valid moves
@@ -91,6 +91,7 @@ void human_move() {
 
 void computer_move() {
 
+    printf("---------------Computer Turn---------------------\n\n");
     player_turn = 'h';
     struct MoveInfo comp_move = ids();
     apply_move(comp_move);
@@ -102,7 +103,7 @@ void computer_move() {
     int row_start = 7 - (start_str[1] - '0');
     int row_end = 7 - (end_str[1] - '0');
     print_board();
-    printf("\nComputer made move: %c%c%c%c (%c%d%c%d)\n", 
+    printf("\nComputer made move: %c%c%c%c (%c%d%c%d)\n\n", 
         start_str[0], start_str[1], end_str[0], end_str[1],
         start_str[0], row_start, end_str[0], row_end );
 
