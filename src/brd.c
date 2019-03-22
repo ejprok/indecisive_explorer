@@ -278,7 +278,7 @@ void debug_board(Bitboard brd) {
     printf("\n");
 }
 
-uint64_t swap_uint64( uint64_t val )
+unsigned long long swap_uint64( uint64_t val )
 {
     val = val << 8;
     val = (val & 0x00000000FFFFFFFF) << 32 | (val & 0xFFFFFFFF00000000) >> 32;
