@@ -165,7 +165,7 @@ int convert_str_to_index(char *input) {
 
 
         default:
-
+            col = 0;
             break;
     }
     switch (input[1])
@@ -190,6 +190,7 @@ int convert_str_to_index(char *input) {
             break;
 
         default:
+            row = 0;
             break;
     }
     location = (row * 8) + col;
