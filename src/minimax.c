@@ -180,6 +180,53 @@ int evaluate(int depth) {
     Bitboard flag = 1;
     flag = flag << 47;
     int location = 47;
+
+    // while (gm_brd.comp_kings) 
+    // { 
+    //   gm_brd.comp_kings &= (gm_brd.comp_kings-1) ; 
+    //   piece_score += 150;
+    // } 
+
+    // while (gm_brd.comp_bishops) 
+    // { 
+    //   gm_brd.comp_bishops &= (gm_brd.comp_bishops-1) ; 
+    //   piece_score += 10;
+    // } 
+
+    // while (gm_brd.comp_horses) 
+    // { 
+    //   gm_brd.comp_horses &= (gm_brd.comp_horses-1) ; 
+    //   piece_score += 10;
+    // } 
+
+    // while (gm_brd.comp_pawns) 
+    // { 
+    //   gm_brd.comp_pawns &= (gm_brd.comp_pawns-1) ; 
+    //   piece_score += 5;
+    // } 
+
+    // while (gm_brd.human_kings) 
+    // { 
+    //   gm_brd.human_kings &= (gm_brd.human_kings-1) ; 
+    //   piece_score -= 100;
+    // } 
+    // while (gm_brd.human_bishops) 
+    // { 
+    //   gm_brd.human_bishops &= (gm_brd.human_bishops-1) ; 
+    //   piece_score -= 10;
+    // } 
+
+    // while (gm_brd.human_horses) 
+    // { 
+    //   gm_brd.human_horses &= (gm_brd.human_horses-1) ; 
+    //   piece_score -= 10;
+    // } 
+
+    // while (gm_brd.human_pawns) 
+    // { 
+    //   gm_brd.human_pawns &= (gm_brd.human_pawns-1) ; 
+    //   piece_score -= 5;
+    // } 
     while(flag) {
         if(flag & gm_brd.comp_kings) {
             piece_score += 150;
@@ -212,7 +259,7 @@ int evaluate(int depth) {
         flag = flag >> 1;
         location--;
     }
-    score = (30*piece_score) + (0*loc_score) - (30*50);
+    score = (30*piece_score) + (int)(0.5*(float)loc_score) - (30*50);
     return score;
 
 }
