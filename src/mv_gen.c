@@ -248,6 +248,7 @@ Bitboard get_king_moves(int location, Bitboard invalid_locations, struct GameBoa
         move = loc << 1;
     }   
     move = move & ~invalid_locations;
+    move &= valid_mask;
     return move;
 
 }
@@ -493,6 +494,7 @@ Bitboard get_horse_moves(int location, Bitboard invalid_locations, struct GameBo
 
     move |= backwards;
     move &= ~invalid_locations;
+    move &= valid_mask;
 
     return move;
 }
@@ -542,6 +544,8 @@ Bitboard get_pawn_moves(int location, Bitboard invalid_locations, struct GameBoa
 
     }
     move &= ~invalid_locations;
+    move &= valid_mask;
+
     return move;
 }
 
