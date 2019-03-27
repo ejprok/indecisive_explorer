@@ -259,7 +259,7 @@ int evaluate(int depth) {
         flag = flag >> 1;
         location--;
     }
-    score = (30*piece_score) + (int)(0.5*(float)loc_score) - (30*50);
+    score = (30*piece_score) + (int)(0.25*(float)loc_score) - (30*100);
     return score;
 
 }
